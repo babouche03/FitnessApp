@@ -1,2 +1,2 @@
 # FitnessApp
-a ios fitness&amp;focus app
+an ios fitness&amp;focus app
