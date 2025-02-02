@@ -11,8 +11,12 @@
 		B70E940F2CBD175C005135B9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B70E940E2CBD175C005135B9 /* ContentView.swift */; };
 		B70E94112CBD175F005135B9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B70E94102CBD175F005135B9 /* Assets.xcassets */; };
 		B70E94142CBD175F005135B9 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B70E94132CBD175F005135B9 /* Preview Assets.xcassets */; };
+		B71BBA512D4F4BEF00AA71CA /* DiaryEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71BBA502D4F4BEF00AA71CA /* DiaryEditView.swift */; };
+		B71BBA532D4F4CC400AA71CA /* DiaryEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71BBA522D4F4CC400AA71CA /* DiaryEntry.swift */; };
 		B749F2282CF7888F001595DE /* MoodPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B749F2272CF7888F001595DE /* MoodPage.swift */; };
 		B749F22A2CF78C98001595DE /* MyPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B749F2292CF78C98001595DE /* MyPage.swift */; };
+		B79076312D4E5A70001CE70C /* HistoryCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B79076302D4E5A70001CE70C /* HistoryCardView.swift */; };
+		B79076332D4E5AA0001CE70C /* HistoryPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B79076322D4E5AA0001CE70C /* HistoryPage.swift */; };
 		B7B5D5AC2D47B6CD00511BC6 /* rain.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = B7B5D5AB2D47B6CD00511BC6 /* rain.mp4 */; };
 		B7B5D5AE2D47B6E600511BC6 /* rain.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B7B5D5AD2D47B6E600511BC6 /* rain.mp3 */; };
 		B7BAF4D62D4525A100203992 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7BAF4D52D4525A100203992 /* Theme.swift */; };
@@ -27,8 +31,12 @@
 		B70E940E2CBD175C005135B9 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		B70E94102CBD175F005135B9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B70E94132CBD175F005135B9 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		B71BBA502D4F4BEF00AA71CA /* DiaryEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiaryEditView.swift; sourceTree = "<group>"; };
+		B71BBA522D4F4CC400AA71CA /* DiaryEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiaryEntry.swift; sourceTree = "<group>"; };
 		B749F2272CF7888F001595DE /* MoodPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoodPage.swift; sourceTree = "<group>"; };
 		B749F2292CF78C98001595DE /* MyPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPage.swift; sourceTree = "<group>"; };
+		B79076302D4E5A70001CE70C /* HistoryCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryCardView.swift; sourceTree = "<group>"; };
+		B79076322D4E5AA0001CE70C /* HistoryPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryPage.swift; sourceTree = "<group>"; };
 		B7B5D5AB2D47B6CD00511BC6 /* rain.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = rain.mp4; sourceTree = "<group>"; };
 		B7B5D5AD2D47B6E600511BC6 /* rain.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = rain.mp3; sourceTree = "<group>"; };
 		B7BAF4D52D4525A100203992 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
@@ -102,6 +110,9 @@
 				B749F2292CF78C98001595DE /* MyPage.swift */,
 				B70E940E2CBD175C005135B9 /* ContentView.swift */,
 				B7E8AEBC2D47B7C500B2086C /* VideoPlayerView.swift */,
+				B79076302D4E5A70001CE70C /* HistoryCardView.swift */,
+				B79076322D4E5AA0001CE70C /* HistoryPage.swift */,
+				B71BBA502D4F4BEF00AA71CA /* DiaryEditView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -110,6 +121,7 @@
 			isa = PBXGroup;
 			children = (
 				B7BAF4D52D4525A100203992 /* Theme.swift */,
+				B71BBA522D4F4CC400AA71CA /* DiaryEntry.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -204,13 +216,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B71BBA532D4F4CC400AA71CA /* DiaryEntry.swift in Sources */,
+				B71BBA512D4F4BEF00AA71CA /* DiaryEditView.swift in Sources */,
 				B70E940F2CBD175C005135B9 /* ContentView.swift in Sources */,
 				B70E940D2CBD175C005135B9 /* FitDemoApp.swift in Sources */,
 				B7BAF4D62D4525A100203992 /* Theme.swift in Sources */,
 				B749F22A2CF78C98001595DE /* MyPage.swift in Sources */,
 				B749F2282CF7888F001595DE /* MoodPage.swift in Sources */,
 				B7BAF4D82D4525B800203992 /* ThemeManager.swift in Sources */,
+				B79076332D4E5AA0001CE70C /* HistoryPage.swift in Sources */,
 				B7E8AEBD2D47B7C500B2086C /* VideoPlayerView.swift in Sources */,
+				B79076312D4E5A70001CE70C /* HistoryCardView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -344,6 +360,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"FitDemo/Preview Content\"";
+				DEVELOPMENT_TEAM = 8B7R34XCRD;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FitDemo/Info.plist;
@@ -372,6 +389,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"FitDemo/Preview Content\"";
+				DEVELOPMENT_TEAM = 8B7R34XCRD;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FitDemo/Info.plist;
