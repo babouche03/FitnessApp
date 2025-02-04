@@ -3,16 +3,14 @@ import SwiftUI
 
 class ThemeManager: ObservableObject {
     @Published var currentTheme: Theme
+    @Published var showingExtendedThemes = false
     private var audioPlayer: AVAudioPlayer?
     
-    let themes: [Theme] = [
-        Theme(id: 0, name: "森林", icon: "🌳", backgroundImage: "forest_bg", backgroundVideo: nil, audioName: "forest"),
-        Theme(id: 1, name: "雨点", icon: "💧", backgroundImage: "rain_bg", backgroundVideo: "rain", audioName: "rain"),
-        Theme(id: 2, name: "海滩", icon: "🌈", backgroundImage: "beach_bg", backgroundVideo: nil, audioName: "beach"),
-        Theme(id: 3, name: "教室", icon: "🏛", backgroundImage: "classroom_bg", backgroundVideo: nil, audioName: "classroom"),
-        Theme(id: 4, name: "灵感", icon: "💡", backgroundImage: "inspiration_bg", backgroundVideo: nil, audioName: "inspiration"),
-        Theme(id: 5, name: "冥想", icon: "🧘", backgroundImage: "meditation_bg", backgroundVideo: nil, audioName: "meditation")
-    ]
+    // 基础主题（前6个）
+    let themes: [Theme] = Array(Theme.allThemes.prefix(6))
+    
+    // 扩展主题（后9个）
+    let extendedThemes: [Theme] = Array(Theme.allThemes.suffix(9))
     
     init() {
         self.currentTheme = themes[0]
@@ -101,9 +99,11 @@ class ThemeManager: ObservableObject {
     }
     
     func switchTheme(to themeId: Int) {
-        guard let theme = themes.first(where: { $0.id == themeId }) else { return }
-        currentTheme = theme
-        playThemeAudio()
+        // 在所有主题中查找匹配的主题（包括基础主题和扩展主题）
+        if let theme = (themes + extendedThemes).first(where: { $0.id == themeId }) {
+            currentTheme = theme
+            playThemeAudio()
+        }
     }
     
     func playThemeAudio() {

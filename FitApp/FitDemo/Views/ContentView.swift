@@ -104,6 +104,7 @@ struct HomePage: View {
     @State private var tempMessage = ""
     @State private var volume: Double = 0.5 // 音量控制状态
     @State private var selectedTheme: Int = 0 // 添加选中主题的状态，默认选择第一个
+    @State private var showingExtendedThemes = false
     @ObservedObject var themeManager: ThemeManager // 改为 ObservedObject
     
     // 添加初始化方法
@@ -120,6 +121,7 @@ struct HomePage: View {
                         VideoPlayerView(videoName: videoName)
                             .edgesIgnoringSafeArea(.all)
                             .transition(.opacity)
+                            .id(themeManager.currentTheme.id)
                     } else {
                         Image(themeManager.currentTheme.backgroundImage)
                             .resizable()
@@ -166,7 +168,7 @@ struct HomePage: View {
 
                         // 圆形功能按钮
                         HStack(spacing: 40) {
-                            CircularButton(iconName: "moon.stars", text: "睡眠")
+                            CircularButton(iconName: "moon.stars", text: "歇会")
                             CircularButton(iconName: "pencil", text: "专注")
                             CircularButton(iconName: "leaf", text: "呼吸")
                         }
@@ -187,6 +189,7 @@ struct HomePage: View {
                                 }
                             }
                             .transition(.opacity)
+                            .id(themeManager.currentTheme.id)
                     } else {
                         Image(themeManager.currentTheme.backgroundImage)
                             .resizable()
@@ -207,16 +210,36 @@ struct HomePage: View {
                         .edgesIgnoringSafeArea(.all)
                         .onTapGesture {
                             withAnimation {
-                                isShowingPopup = false
+                                if showingExtendedThemes {
+                                    showingExtendedThemes = false
+                                } else {
+                                    isShowingPopup = false
+                                }
                             }
                         }
 
                     VStack(spacing: 0) {
                         // 顶部关闭按钮
                         HStack {
+                            if showingExtendedThemes {
+                                Button(action: {
+                                    withAnimation {
+                                        showingExtendedThemes = false
+                                    }
+                                }) {
+                                    Image(systemName: "chevron.left")
+                                        .font(.system(size: 20))
+                                        .foregroundColor(.white)
+                                }
+                                .padding(16)
+                                .padding(.top, 16)
+                            }
+                            
                             Spacer()
+                            
                             Button(action: {
                                 withAnimation {
+                                    showingExtendedThemes = false
                                     isShowingPopup = false
                                 }
                             }) {
@@ -228,49 +251,73 @@ struct HomePage: View {
                             .padding(.top, 16)
                         }
                         
-                        Text("环境主题")
+                        Text(showingExtendedThemes ? "More" : "环境主题")
                             .foregroundColor(.white)
                             .font(.system(size: 18))
                             .padding(.top, 10)
                         
-                        // 环境选项网格布局
-                        LazyVGrid(columns: [
-                            GridItem(.flexible()),
-                            GridItem(.flexible())
-                        ], spacing: 20) {
-                            ForEach(themeManager.themes) { theme in
-                                ThemeButton(
-                                    icon: theme.icon,
-                                    text: theme.name,
-                                    isSelected: selectedTheme == theme.id
-                                )
-                                .onTapGesture {
-                                    withAnimation(.easeInOut(duration: 0.2)) {
-                                        selectedTheme = theme.id
-                                        themeManager.switchTheme(to: theme.id)
+                        if showingExtendedThemes {
+                            // 扩展主题网格布局 (3x3)
+                            LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 3), spacing: 20) {
+                                ForEach(themeManager.extendedThemes) { theme in
+                                    ThemeButton(
+                                        icon: theme.icon,
+                                        text: theme.name,
+                                        isSelected: selectedTheme == theme.id
+                                    )
+                                    .onTapGesture {
+                                        withAnimation(.easeInOut(duration: 0.2)) {
+                                            selectedTheme = theme.id
+                                            themeManager.switchTheme(to: theme.id)
+                                        }
                                     }
                                 }
                             }
+                            .padding(.vertical, 20)
+                        } else {
+                            // 原有主题网格布局 (2x3)
+                            LazyVGrid(columns: [
+                                GridItem(.flexible()),
+                                GridItem(.flexible())
+                            ], spacing: 20) {
+                                ForEach(themeManager.themes) { theme in
+                                    ThemeButton(
+                                        icon: theme.icon,
+                                        text: theme.name,
+                                        isSelected: selectedTheme == theme.id
+                                    )
+                                    .onTapGesture {
+                                        withAnimation(.easeInOut(duration: 0.2)) {
+                                            selectedTheme = theme.id
+                                            themeManager.switchTheme(to: theme.id)
+                                        }
+                                    }
+                                }
+                            }
+                            .padding(.vertical, 20)
                         }
-                        .padding(.vertical, 20)
                         
                         Spacer()
                         
-                        Button(action: {
-                            // 处理上传背景操作
-                        }) {
-                            Text("自定义主题")
-                                .foregroundColor(.white)
-                                .font(.system(size: 16))
-                                .padding(.vertical, 8)
-                                .padding(.horizontal, 20)
-                                .background(Color.gray.opacity(0.3))
-                                .cornerRadius(15)
+                        if !showingExtendedThemes {
+                            Button(action: {
+                                withAnimation {
+                                    showingExtendedThemes = true
+                                }
+                            }) {
+                                Text("更多主题")
+                                    .foregroundColor(.white)
+                                    .font(.system(size: 16))
+                                    .padding(.vertical, 8)
+                                    .padding(.horizontal, 20)
+                                    .background(Color.gray.opacity(0.3))
+                                    .cornerRadius(15)
+                            }
+                            .padding(.top, 10)
+                            .padding(.bottom, 20)
                         }
-                        .padding(.top, 10)
-                        .padding(.bottom, 20)
                         
-                        // 修改音量控制
+                        // 音量控制
                         HStack {
                             Image(systemName: "speaker.wave.2")
                                 .foregroundColor(.white)
@@ -282,7 +329,7 @@ struct HomePage: View {
                         .padding(.horizontal, 30)
                         .padding(.bottom, 40)
                     }
-                    .frame(width: 280, height: 530) // 增加高度以容纳所有内容
+                    .frame(width: 280, height: 530)
                     .background(Color.black.opacity(0.7))
                     .cornerRadius(20)
                     .shadow(radius: 10)
@@ -336,11 +383,16 @@ struct HomePage: View {
 struct CircularButton: View {
     var iconName: String
     var text: String
+    @State private var showingRestModal = false
+    @State private var selectedRestTime: Double = 10
+    @State private var showRestView = false
 
     var body: some View {
         VStack {
             Button(action: {
-                // 在此添加按钮的动作
+                if text == "歇会" {
+                    showingRestModal = true
+                }
             }) {
                 Image(systemName: iconName)
                     .resizable()
@@ -349,12 +401,88 @@ struct CircularButton: View {
                     .background(Color.gray.opacity(0.5))
                     .clipShape(Circle())
             }
+            .sheet(isPresented: $showingRestModal) {
+                RestSettingModal(selectedTime: $selectedRestTime, showRestView: $showRestView, showModal: $showingRestModal)
+                    .presentationDetents([.height(280)]) // 设置固定高度
+                    .presentationBackground(.ultraThinMaterial) // 设置毛玻璃效果
+                    .presentationCornerRadius(30) // 设置圆角
+            }
+            .fullScreenCover(isPresented: $showRestView) {
+                RestView(restTime: Int(selectedRestTime), isPresented: $showRestView)
+            }
 
             Text(text)
                 .font(.system(size: 14))
                 .foregroundColor(.white)
                 .padding(.top, 8)
         }
+    }
+}
+
+struct RestSettingModal: View {
+    @Binding var selectedTime: Double
+    @Binding var showRestView: Bool
+    @Binding var showModal: Bool
+    
+    var body: some View {
+        VStack(spacing: 20) {
+            // 标题和关闭按钮
+            HStack {
+                Text("设置休息时间")
+                    .font(.headline)
+                    .foregroundColor(.primary)
+                
+                Spacer()
+                
+                Button(action: {
+                    showModal = false
+                }) {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundColor(.gray)
+                        .font(.system(size: 22))
+                }
+            }
+            .padding(.horizontal)
+            .padding(.top)
+            
+            // 时间选择器
+            VStack(spacing: 8) {
+                HStack {
+                    Text("\(Int(selectedTime))")
+                        .font(.system(size: 32, weight: .bold))
+                        .foregroundColor(.primary)
+                    Text("分钟")
+                        .font(.system(size: 16))
+                        .foregroundColor(.gray)
+                }
+                
+                Slider(value: $selectedTime, in: 1...60, step: 1)
+                    .tint(.blue)
+                    .padding(.horizontal)
+            }
+            .padding(.vertical)
+            
+            // 确认按钮
+            Button(action: {
+                showModal = false
+                showRestView = true
+            }) {
+                Text("真得歇会儿")
+                    .foregroundColor(.white)
+                    .frame(width: 180, height: 45)
+                    .background(
+                        LinearGradient(
+                            gradient: Gradient(colors: [Color.blue.opacity(0.8), Color.blue]),
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                    )
+                    .cornerRadius(22.5)
+                    .shadow(color: .blue.opacity(0.3), radius: 5, x: 0, y: 3)
+            }
+            .padding(.vertical)
+        }
+        .padding(.bottom)
     }
 }
 
