@@ -105,12 +105,7 @@ struct HomePage: View {
     @State private var volume: Double = 0.5 // 音量控制状态
     @State private var selectedTheme: Int = 0 // 添加选中主题的状态，默认选择第一个
     @State private var showingExtendedThemes = false
-    @ObservedObject var themeManager: ThemeManager // 改为 ObservedObject
-    
-    // 添加初始化方法
-    init(themeManager: ThemeManager) {
-        self._themeManager = ObservedObject(wrappedValue: themeManager)
-    }
+    @ObservedObject var themeManager: ThemeManager
     
     var body: some View {
         NavigationView {
@@ -168,9 +163,15 @@ struct HomePage: View {
 
                         // 圆形功能按钮
                         HStack(spacing: 40) {
-                            CircularButton(iconName: "moon.stars", text: "歇会")
-                            CircularButton(iconName: "pencil", text: "专注")
-                            CircularButton(iconName: "leaf", text: "呼吸")
+                            CircularButton(iconName: "moon.stars", 
+                                         text: "歇会", 
+                                         themeManager: themeManager)
+                            CircularButton(iconName: "pencil", 
+                                         text: "专注", 
+                                         themeManager: themeManager)
+                            CircularButton(iconName: "leaf", 
+                                         text: "呼吸", 
+                                         themeManager: themeManager)
                         }
                         .transition(.opacity)
 
@@ -384,37 +385,71 @@ struct CircularButton: View {
     var iconName: String
     var text: String
     @State private var showingRestModal = false
+    @State private var showingFocusModal = false
     @State private var selectedRestTime: Double = 10
+    @State private var selectedRestInterval: Double = 30 // 休息提醒间隔(分钟)
     @State private var showRestView = false
-
+    @State private var showFocusView = false
+    @State private var disableRestReminder = false
+    @ObservedObject var themeManager: ThemeManager
+    
     var body: some View {
-        VStack {
-            Button(action: {
-                if text == "歇会" {
-                    showingRestModal = true
+        ZStack {
+            VStack {
+                Button(action: {
+                    if text == "歇会" {
+                        showingRestModal = true
+                    } else if text == "专注" {
+                        showingFocusModal = true
+                    }
+                }) {
+                    Image(systemName: iconName)
+                        .resizable()
+                        .frame(width: 30, height: 30)
+                        .padding()
+                        .background(Color.gray.opacity(0.5))
+                        .clipShape(Circle())
                 }
-            }) {
-                Image(systemName: iconName)
-                    .resizable()
-                    .frame(width: 30, height: 30)
-                    .padding()
-                    .background(Color.gray.opacity(0.5))
-                    .clipShape(Circle())
-            }
-            .sheet(isPresented: $showingRestModal) {
-                RestSettingModal(selectedTime: $selectedRestTime, showRestView: $showRestView, showModal: $showingRestModal)
-                    .presentationDetents([.height(280)]) // 设置固定高度
-                    .presentationBackground(.ultraThinMaterial) // 设置毛玻璃效果
-                    .presentationCornerRadius(30) // 设置圆角
-            }
-            .fullScreenCover(isPresented: $showRestView) {
-                RestView(restTime: Int(selectedRestTime), isPresented: $showRestView)
-            }
 
-            Text(text)
-                .font(.system(size: 14))
-                .foregroundColor(.white)
-                .padding(.top, 8)
+                Text(text)
+                    .font(.system(size: 14))
+                    .foregroundColor(.white)
+                    .padding(.top, 8)
+            }
+        }
+        // 休息模式弹窗
+        .sheet(isPresented: $showingRestModal) {
+            RestSettingModal(selectedTime: $selectedRestTime, 
+                           showRestView: $showRestView, 
+                           showModal: $showingRestModal)
+                .presentationDetents([.height(280)])
+                .presentationBackground(.ultraThinMaterial)
+                .presentationCornerRadius(30)
+        }
+        // 专注模式弹窗
+        .sheet(isPresented: $showingFocusModal) {
+            FocusSettingModal(
+                selectedInterval: $selectedRestInterval,
+                disableReminder: $disableRestReminder,
+                showFocusView: $showFocusView,
+                showModal: $showingFocusModal
+            )
+                .presentationDetents([.height(330)])
+                .presentationBackground(.ultraThinMaterial)
+                .presentationCornerRadius(30)
+        }
+        // 休息页面
+        .fullScreenCover(isPresented: $showRestView) {
+            RestView(restTime: Int(selectedRestTime), 
+                    isPresented: $showRestView,
+                    parentThemeManager: themeManager)
+        }
+        // 专注页面
+        .fullScreenCover(isPresented: $showFocusView) {
+            FocusView(
+                isPresented: $showFocusView,
+                restInterval: disableRestReminder ? 0 : Int(selectedRestInterval)
+            )
         }
     }
 }
@@ -428,7 +463,7 @@ struct RestSettingModal: View {
         VStack(spacing: 20) {
             // 标题和关闭按钮
             HStack {
-                Text("设置休息时间")
+                Text("休息")
                     .font(.headline)
                     .foregroundColor(.primary)
                 
@@ -452,12 +487,12 @@ struct RestSettingModal: View {
                         .font(.system(size: 32, weight: .bold))
                         .foregroundColor(.primary)
                     Text("分钟")
-                        .font(.system(size: 16))
-                        .foregroundColor(.gray)
+                        .font(.system(size: 18))
+                        .foregroundColor(.white)
                 }
                 
                 Slider(value: $selectedTime, in: 1...60, step: 1)
-                    .tint(.blue)
+                    .tint(.white)
                     .padding(.horizontal)
             }
             .padding(.vertical)
@@ -465,20 +500,107 @@ struct RestSettingModal: View {
             // 确认按钮
             Button(action: {
                 showModal = false
-                showRestView = true
+                // 添加短暂延迟确保 sheet 完全关闭后再显示全屏视图
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    showRestView = true
+                }
             }) {
                 Text("真得歇会儿")
                     .foregroundColor(.white)
                     .frame(width: 180, height: 45)
                     .background(
                         LinearGradient(
-                            gradient: Gradient(colors: [Color.blue.opacity(0.8), Color.blue]),
+                            gradient: Gradient(colors: [Color.black.opacity(0.8), Color.gray]),
                             startPoint: .leading,
                             endPoint: .trailing
                         )
                     )
                     .cornerRadius(22.5)
-                    .shadow(color: .blue.opacity(0.3), radius: 5, x: 0, y: 3)
+                    .shadow(color: .white.opacity(0.3), radius: 5, x: 0, y: 3)
+            }
+            .padding(.vertical)
+        }
+        .padding(.bottom)
+    }
+}
+
+// 专注设置弹窗
+struct FocusSettingModal: View {
+    @Binding var selectedInterval: Double
+    @Binding var disableReminder: Bool
+    @Binding var showFocusView: Bool
+    @Binding var showModal: Bool
+    
+    var body: some View {
+        VStack(spacing: 20) {
+            // 标题和关闭按钮
+            HStack {
+                Text("专注")
+                    .font(.headline)
+                    .foregroundColor(.primary)
+                
+                Spacer()
+                
+                Button(action: {
+                    showModal = false
+                }) {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundColor(.gray)
+                        .font(.system(size: 22))
+                }
+            }
+            .padding(.horizontal)
+            .padding(.top)
+            
+            // 时间选择器
+            VStack(spacing: 8) {
+                HStack {
+                    Text("休息频次：")
+                        .font(.system(size: 18))
+                        .foregroundColor(.white)
+                        .padding(.trailing, 10)
+                    Text("\(Int(selectedInterval))")
+                        .font(.system(size: 32, weight: .bold))
+                        .foregroundColor(.primary)
+                    Text("分钟/次")
+                        .font(.system(size: 18))
+                        .foregroundColor(.white)
+                }
+                
+                Slider(value: $selectedInterval, in: 15...120, step: 15)
+                    .tint(.white)
+                    .padding(.horizontal)
+            }
+            .padding(.vertical)
+            
+            // 禁用提醒选项
+            Toggle("不需要提醒休息", isOn: $disableReminder)
+                .foregroundColor(.white)
+                .padding(.horizontal)
+                .toggleStyle(
+                    SwitchToggleStyle(tint: Color.black.opacity(0.5))
+                )
+            
+            // 确认按钮
+            Button(action: {
+                showModal = false
+                // 添加短暂延迟确保 sheet 完全关闭后再显示全屏视图
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    showFocusView = true
+                }
+            }) {
+                Text("专注之旅")
+                    .foregroundColor(.white)
+                    .frame(width: 180, height: 45)
+                    .background(
+                        LinearGradient(
+                            gradient: Gradient(colors: [Color.black.opacity(0.8), Color.gray]),
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                    )
+                    .cornerRadius(22.5)
+                    .shadow(color: .white.opacity(0.3), radius: 5, x: 0, y: 3)
             }
             .padding(.vertical)
         }

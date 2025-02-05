@@ -11,6 +11,7 @@
 		B70E940F2CBD175C005135B9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B70E940E2CBD175C005135B9 /* ContentView.swift */; };
 		B70E94112CBD175F005135B9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B70E94102CBD175F005135B9 /* Assets.xcassets */; };
 		B70E94142CBD175F005135B9 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B70E94132CBD175F005135B9 /* Preview Assets.xcassets */; };
+		B716FBF32D525455005F474F /* FocusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B716FBF22D525455005F474F /* FocusView.swift */; };
 		B71BBA512D4F4BEF00AA71CA /* DiaryEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71BBA502D4F4BEF00AA71CA /* DiaryEditView.swift */; };
 		B71BBA532D4F4CC400AA71CA /* DiaryEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71BBA522D4F4CC400AA71CA /* DiaryEntry.swift */; };
 		B749F2282CF7888F001595DE /* MoodPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B749F2272CF7888F001595DE /* MoodPage.swift */; };
@@ -33,6 +34,7 @@
 		B70E940E2CBD175C005135B9 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		B70E94102CBD175F005135B9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B70E94132CBD175F005135B9 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		B716FBF22D525455005F474F /* FocusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusView.swift; sourceTree = "<group>"; };
 		B71BBA502D4F4BEF00AA71CA /* DiaryEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiaryEditView.swift; sourceTree = "<group>"; };
 		B71BBA522D4F4CC400AA71CA /* DiaryEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiaryEntry.swift; sourceTree = "<group>"; };
 		B749F2272CF7888F001595DE /* MoodPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoodPage.swift; sourceTree = "<group>"; };
@@ -119,6 +121,7 @@
 				B79076322D4E5AA0001CE70C /* HistoryPage.swift */,
 				B71BBA502D4F4BEF00AA71CA /* DiaryEditView.swift */,
 				B78BC1E02D51161F00848016 /* RestView.swift */,
+				B716FBF22D525455005F474F /* FocusView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -232,6 +235,7 @@
 				B749F2282CF7888F001595DE /* MoodPage.swift in Sources */,
 				B7BAF4D82D4525B800203992 /* ThemeManager.swift in Sources */,
 				B79076332D4E5AA0001CE70C /* HistoryPage.swift in Sources */,
+				B716FBF32D525455005F474F /* FocusView.swift in Sources */,
 				B7E8AEBD2D47B7C500B2086C /* VideoPlayerView.swift in Sources */,
 				B78BC1E12D51161F00848016 /* RestView.swift in Sources */,
 				B79076312D4E5A70001CE70C /* HistoryCardView.swift in Sources */,

@@ -1,47 +1,137 @@
 import SwiftUI
+import AVFoundation
+import UserNotifications
 
 struct RestView: View {
     let restTime: Int
     @Binding var isPresented: Bool
     @State private var timeRemaining: Int
     @State private var timer: Timer?
+    @State private var showThemeSelector = false
+    @ObservedObject var parentThemeManager: ThemeManager
+    @StateObject private var localThemeManager = ThemeManager()
     
-    init(restTime: Int, isPresented: Binding<Bool>) {
+    init(restTime: Int, isPresented: Binding<Bool>, parentThemeManager: ThemeManager) {
         self.restTime = restTime
         self._isPresented = isPresented
-        self._timeRemaining = State(initialValue: restTime * 60) // 转换为秒
+        self._timeRemaining = State(initialValue: restTime * 60)
+        self._parentThemeManager = ObservedObject(wrappedValue: parentThemeManager)
+    }
+    
+    // 添加一个计算属性来获取顶部安全区域
+    private var topSafeAreaInset: CGFloat {
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let window = windowScene.windows.first {
+            return window.safeAreaInsets.top
+        }
+        return 47 // 默认值
     }
     
     var body: some View {
-        ZStack {
-            Color.black.opacity(0.9).edgesIgnoringSafeArea(.all)
-            
-            VStack(spacing: 30) {
-                Text("休息时间")
-                    .font(.largeTitle)
-                    .foregroundColor(.white)
+        GeometryReader { geometry in
+            ZStack {
+                // 背景视频或图片
+                if let videoName = localThemeManager.currentTheme.backgroundVideo {
+                    VideoPlayerView(videoName: videoName)
+                        .frame(width: geometry.size.width, height: geometry.size.height)
+                        .edgesIgnoringSafeArea(.all)
+                        .transition(.opacity)
+                        .id(localThemeManager.currentTheme.id)
+                } else {
+                    Image(localThemeManager.currentTheme.backgroundImage)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: geometry.size.width, height: geometry.size.height)
+                        .edgesIgnoringSafeArea(.all)
+                        .transition(.opacity)
+                }
                 
-                TimerView(timeRemaining: timeRemaining)
-                    .padding()
+                // 主要内容
+                VStack(spacing: 0) {
+                    // 顶部工具栏
+                    HStack {
+                        Spacer()
+                        Button(action: {
+                            showThemeSelector = true
+                        }) {
+                            Image(systemName: "gearshape")
+                                .font(.system(size: 28))
+                                .foregroundColor(.white)
+                        }
+                        .padding(.top, topSafeAreaInset)
+                        .padding(.trailing, 30)
+                    }
+                    
+                    Spacer()
+                }
                 
-                Button(action: {
-                    timer?.invalidate()
-                    isPresented = false
-                }) {
-                    Text("结束休息")
+                // 中央倒计时组件
+                VStack(spacing: 25) {
+                    Text("Time for break")
+                        .font(.system(size: 28, weight: .medium))
                         .foregroundColor(.white)
-                        .frame(width: 200, height: 45)
-                        .background(Color.blue)
-                        .cornerRadius(22.5)
+                    
+                    TimerView(timeRemaining: timeRemaining)
+                        .padding()
+                    
+                    Button(action: {
+                        timer?.invalidate()
+                        isPresented = false
+                    }) {
+                        Text("结束休息")
+                            .foregroundColor(.white)
+                            .frame(width: 160, height: 45)
+                            .background(Color.black.opacity(0.3))
+                            .cornerRadius(22.5)
+                    }
+                }
+                .offset(y: -30) // 微调整体位置，使视觉上更居中
+                
+                // 主题选择弹窗
+                if showThemeSelector {
+                    ThemeSelectorView(
+                        isShowing: $showThemeSelector,
+                        themeManager: localThemeManager
+                    )
                 }
             }
+            .ignoresSafeArea()
         }
+        .ignoresSafeArea()
         .onAppear {
+            // 设置默认主题（森林）
+            localThemeManager.switchTheme(to: 0)
             startTimer()
+            requestNotificationPermission()
+            // 暂停父级音频
+            parentThemeManager.pauseAudio()
         }
         .onDisappear {
             timer?.invalidate()
+            // 停止本地音频并恢复父级音频
+            localThemeManager.stopAudio()
+            parentThemeManager.resumeAudio()
         }
+    }
+    
+    private func requestNotificationPermission() {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { granted, error in
+            if granted {
+                print("通知权限已获取")
+            }
+        }
+    }
+    
+    private func scheduleNotification() {
+        let content = UNMutableNotificationContent()
+        content.title = "休息时间结束"
+        content.body = "该开始工作啦！"
+        content.sound = UNNotificationSound.default
+        
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+        
+        UNUserNotificationCenter.current().add(request)
     }
     
     private func startTimer() {
@@ -50,7 +140,14 @@ struct RestView: View {
                 timeRemaining -= 1
             } else {
                 timer?.invalidate()
-                isPresented = false
+                // 播放系统提示音
+                AudioServicesPlaySystemSound(1005) // 系统提示音ID
+                // 发送通知
+                scheduleNotification()
+                // 延迟关闭页面
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    isPresented = false
+                }
             }
         }
     }
@@ -96,5 +193,120 @@ struct TimeBlock: View {
         .frame(width: 80, height: 100)
         .background(Color.gray.opacity(0.2))
         .cornerRadius(15)
+    }
+}
+
+// 主题选择器视图
+struct ThemeSelectorView: View {
+    @Binding var isShowing: Bool
+    @ObservedObject var themeManager: ThemeManager
+    @State private var showingExtendedThemes = false
+    
+    var body: some View {
+        ZStack {
+            Color.black.opacity(0.7)
+                .edgesIgnoringSafeArea(.all)
+                .onTapGesture {
+                    withAnimation {
+                        if showingExtendedThemes {
+                            showingExtendedThemes = false
+                        } else {
+                            isShowing = false
+                        }
+                    }
+                }
+            
+            VStack(spacing: 0) {
+                // 顶部标题栏
+                HStack {
+                    if showingExtendedThemes {
+                        Button(action: {
+                            withAnimation {
+                                showingExtendedThemes = false
+                            }
+                        }) {
+                            Image(systemName: "chevron.left")
+                                .font(.system(size: 20))
+                                .foregroundColor(.white)
+                        }
+                        .padding(16)
+                    }
+                    
+                    Spacer()
+                    
+                    Text(showingExtendedThemes ? "More" : "")
+                        .foregroundColor(.white)
+                        .font(.system(size: 18))
+                    
+                    Spacer()
+                    
+                    Button(action: {
+                        withAnimation {
+                            isShowing = false
+                        }
+                    }) {
+                        Image(systemName: "xmark")
+                            .font(.system(size: 20))
+                            .foregroundColor(.white)
+                    }
+                    .padding(16)
+                }
+                .padding(.top, 16)
+                
+                if showingExtendedThemes {
+                    // 扩展主题网格
+                    LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 3), spacing: 20) {
+                        ForEach(themeManager.extendedThemes) { theme in
+                            ThemeButton(
+                                icon: theme.icon,
+                                text: theme.name,
+                                isSelected: themeManager.currentTheme.id == theme.id
+                            )
+                            .onTapGesture {
+                                withAnimation {
+                                    themeManager.switchTheme(to: theme.id)
+                                }
+                            }
+                        }
+                    }
+                    .padding(.vertical, 20)
+                } else {
+                    // 基础主题网格
+                    LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 20) {
+                        ForEach(themeManager.themes) { theme in
+                            ThemeButton(
+                                icon: theme.icon,
+                                text: theme.name,
+                                isSelected: themeManager.currentTheme.id == theme.id
+                            )
+                            .onTapGesture {
+                                withAnimation {
+                                    themeManager.switchTheme(to: theme.id)
+                                }
+                            }
+                        }
+                    }
+                    .padding(.vertical, 20)
+                    
+                    Button(action: {
+                        withAnimation {
+                            showingExtendedThemes = true
+                        }
+                    }) {
+                        Text("更多主题")
+                            .foregroundColor(.white)
+                            .font(.system(size: 16))
+                            .padding(.vertical, 8)
+                            .padding(.horizontal, 20)
+                            .background(Color.gray.opacity(0.3))
+                            .cornerRadius(15)
+                    }
+                    .padding(.vertical, 20)
+                }
+            }
+            .frame(width: 280)
+            .background(Color.black.opacity(0.7))
+            .cornerRadius(20)
+        }
     }
 }
