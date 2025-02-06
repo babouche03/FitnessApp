@@ -387,7 +387,7 @@ struct CircularButton: View {
     @State private var showingRestModal = false
     @State private var showingFocusModal = false
     @State private var selectedRestTime: Double = 10
-    @State private var selectedRestInterval: Double = 30 // 休息提醒间隔(分钟)
+    @State private var selectedRestInterval: Double = 1
     @State private var showRestView = false
     @State private var showFocusView = false
     @State private var disableRestReminder = false
@@ -417,7 +417,6 @@ struct CircularButton: View {
                     .padding(.top, 8)
             }
         }
-        // 休息模式弹窗
         .sheet(isPresented: $showingRestModal) {
             RestSettingModal(selectedTime: $selectedRestTime, 
                            showRestView: $showRestView, 
@@ -425,8 +424,14 @@ struct CircularButton: View {
                 .presentationDetents([.height(280)])
                 .presentationBackground(.ultraThinMaterial)
                 .presentationCornerRadius(30)
+                .onDisappear {
+                    // 确保在弹窗消失时更新时间值
+                    if showRestView {
+                        // 如果是点击"真得歇会儿"按钮关闭的弹窗，保持当前选择的时间
+                        print("Selected time: \(selectedRestTime)")
+                    }
+                }
         }
-        // 专注模式弹窗
         .sheet(isPresented: $showingFocusModal) {
             FocusSettingModal(
                 selectedInterval: $selectedRestInterval,
@@ -438,13 +443,11 @@ struct CircularButton: View {
                 .presentationBackground(.ultraThinMaterial)
                 .presentationCornerRadius(30)
         }
-        // 休息页面
         .fullScreenCover(isPresented: $showRestView) {
             RestView(restTime: Int(selectedRestTime), 
                     isPresented: $showRestView,
                     parentThemeManager: themeManager)
         }
-        // 专注页面
         .fullScreenCover(isPresented: $showFocusView) {
             FocusView(
                 isPresented: $showFocusView,
@@ -458,6 +461,18 @@ struct RestSettingModal: View {
     @Binding var selectedTime: Double
     @Binding var showRestView: Bool
     @Binding var showModal: Bool
+    
+    // 添加一个本地状态来跟踪用户的选择
+    @State private var tempSelectedTime: Double
+    
+    // 添加初始化器
+    init(selectedTime: Binding<Double>, showRestView: Binding<Bool>, showModal: Binding<Bool>) {
+        self._selectedTime = selectedTime
+        self._showRestView = showRestView
+        self._showModal = showModal
+        // 初始化临时状态为传入的值
+        self._tempSelectedTime = State(initialValue: selectedTime.wrappedValue)
+    }
     
     var body: some View {
         VStack(spacing: 20) {
@@ -483,7 +498,7 @@ struct RestSettingModal: View {
             // 时间选择器
             VStack(spacing: 8) {
                 HStack {
-                    Text("\(Int(selectedTime))")
+                    Text("\(Int(tempSelectedTime))")
                         .font(.system(size: 32, weight: .bold))
                         .foregroundColor(.primary)
                     Text("分钟")
@@ -491,7 +506,7 @@ struct RestSettingModal: View {
                         .foregroundColor(.white)
                 }
                 
-                Slider(value: $selectedTime, in: 1...60, step: 1)
+                Slider(value: $tempSelectedTime, in: 1...60, step: 1)
                     .tint(.white)
                     .padding(.horizontal)
             }
@@ -499,8 +514,11 @@ struct RestSettingModal: View {
             
             // 确认按钮
             Button(action: {
+                // 更新绑定的时间值
+                selectedTime = tempSelectedTime
+                // 关闭弹窗
                 showModal = false
-                // 添加短暂延迟确保 sheet 完全关闭后再显示全屏视图
+                // 短暂延迟后显示休息视图
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                     showRestView = true
                 }
@@ -531,6 +549,24 @@ struct FocusSettingModal: View {
     @Binding var showFocusView: Bool
     @Binding var showModal: Bool
     
+    // 添加临时状态变量
+    @State private var tempSelectedInterval: Double
+    @State private var tempDisableReminder: Bool
+    
+    // 添加初始化器
+    init(selectedInterval: Binding<Double>, 
+         disableReminder: Binding<Bool>,
+         showFocusView: Binding<Bool>,
+         showModal: Binding<Bool>) {
+        self._selectedInterval = selectedInterval
+        self._disableReminder = disableReminder
+        self._showFocusView = showFocusView
+        self._showModal = showModal
+        // 初始化临时状态
+        self._tempSelectedInterval = State(initialValue: selectedInterval.wrappedValue)
+        self._tempDisableReminder = State(initialValue: disableReminder.wrappedValue)
+    }
+    
     var body: some View {
         VStack(spacing: 20) {
             // 标题和关闭按钮
@@ -559,7 +595,7 @@ struct FocusSettingModal: View {
                         .font(.system(size: 18))
                         .foregroundColor(.white)
                         .padding(.trailing, 10)
-                    Text("\(Int(selectedInterval))")
+                    Text("\(Int(tempSelectedInterval))")
                         .font(.system(size: 32, weight: .bold))
                         .foregroundColor(.primary)
                     Text("分钟/次")
@@ -567,24 +603,26 @@ struct FocusSettingModal: View {
                         .foregroundColor(.white)
                 }
                 
-                Slider(value: $selectedInterval, in: 15...120, step: 15)
+                Slider(value: $tempSelectedInterval, in: 15...120, step: 15)
                     .tint(.white)
                     .padding(.horizontal)
             }
             .padding(.vertical)
             
             // 禁用提醒选项
-            Toggle("不需要提醒休息", isOn: $disableReminder)
+            Toggle("本次不需要提醒休息", isOn: $tempDisableReminder)
                 .foregroundColor(.white)
                 .padding(.horizontal)
                 .toggleStyle(
-                    SwitchToggleStyle(tint: Color.black.opacity(0.5))
+                    SwitchToggleStyle(tint: Color.gray.opacity(0.8))
                 )
             
             // 确认按钮
             Button(action: {
+                // 更新绑定的值
+                selectedInterval = tempSelectedInterval
+                disableReminder = tempDisableReminder
                 showModal = false
-                // 添加短暂延迟确保 sheet 完全关闭后再显示全屏视图
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                     showFocusView = true
                 }

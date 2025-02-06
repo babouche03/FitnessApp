@@ -83,12 +83,21 @@ struct HistoryPage: View {
                     DiaryEditView(isEditing: true, existingDiary: diary)
                 }
             }
+            .onChange(of: showDiaryDetail) { oldValue, newValue in
+                if !newValue {
+                    loadDiaries()
+                }
+            }
         }
     }
     
     private func loadDiaries() {
         diaries = DiaryManager.shared.getAllDiaries()
-        activeIndex = 0
+        // 保持当前查看的日记位置
+        if let selectedDiaryId = selectedDiary?.id,
+           let index = diaries.firstIndex(where: { $0.id == selectedDiaryId }) {
+            activeIndex = Double(index)
+        }
     }
     
     private func handleDragEnd(velocity: CGFloat) {

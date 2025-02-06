@@ -13,8 +13,8 @@ extension Theme {
         // 基础主题
         Theme(id: 0, name: "森林", icon: "🌳", backgroundImage: "forest_bg", backgroundVideo: nil, audioName: "forest"),
         Theme(id: 1, name: "雨点", icon: "💧", backgroundImage: "rain_bg", backgroundVideo: "rain", audioName: "rain"),
-        Theme(id: 2, name: "海滩", icon: "🌈", backgroundImage: "beach_bg", backgroundVideo: "bonfire", audioName: "beach"),
-        Theme(id: 3, name: "教室", icon: "🏛", backgroundImage: "classroom_bg", backgroundVideo: nil, audioName: "classroom"),
+        Theme(id: 2, name: "海滩", icon: "🌈", backgroundImage: "beach_bg", backgroundVideo: "beach", audioName: "beach"),
+        Theme(id: 3, name: "教堂", icon: "🏛", backgroundImage: "classroom_bg", backgroundVideo: nil, audioName: "classroom"),
         Theme(id: 4, name: "灵感", icon: "💡", backgroundImage: "inspiration_bg", backgroundVideo: nil, audioName: "inspiration"),
         Theme(id: 5, name: "冥想", icon: "🧘", backgroundImage: "meditation_bg", backgroundVideo: nil, audioName: "meditation"),
         

@@ -7,6 +7,7 @@ struct MoodPage: View {
     private let fullText = "今天感觉怎么样"  // 完整文本
     @State private var showDiaryOptions = false
     @State private var showDiaryEdit = false
+    @State private var typingTimer: Timer?
 
     var body: some View {
         ZStack {
@@ -118,6 +119,10 @@ struct MoodPage: View {
                 .onAppear {
                     startTypingAnimation()
                 }
+                .onDisappear {
+                    typingTimer?.invalidate()
+                    typingTimer = nil
+                }
             
             Spacer()
 
@@ -154,13 +159,19 @@ struct MoodPage: View {
                     .foregroundColor(.white)
                     .padding()
                     .frame(maxWidth: .infinity)
-                    .background(Color.gray)
-                    .cornerRadius(30)
+                    .background(.ultraThinMaterial)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 30)
+                            .stroke(Color.white.opacity(0.3), lineWidth: 3)
+                    )
+                .cornerRadius(30)
+                .shadow(color: .white.opacity(0.2), radius: 8, x: 0, y: 0)
             }
             .padding(.horizontal, 50)
             .confirmationDialog("选择操作", isPresented: $showDiaryOptions) {
                 Button("继续上次日记") {
-                    if DiaryManager.shared.getCurrentDraft() != nil {
+                    if let lastDiary = DiaryManager.shared.getAllDiaries().first {
+                        DiaryManager.shared.setCurrentDraft(lastDiary)
                         showDiaryEdit = true
                     }
                 }
@@ -170,7 +181,13 @@ struct MoodPage: View {
                 }
             }
             .sheet(isPresented: $showDiaryEdit) {
-                DiaryEditView(moodValue: moodValue)
+                if let draft = DiaryManager.shared.getCurrentDraft() {
+                    // 继续上次日记
+                    DiaryEditView(isEditing: true, existingDiary: draft, moodValue: moodValue)
+                } else {
+                    // 新建日记
+                    DiaryEditView(moodValue: moodValue)
+                }
             }
 
             Spacer()
@@ -179,15 +196,20 @@ struct MoodPage: View {
     
     // 打字动画函数
     private func startTypingAnimation() {
+        typingTimer?.invalidate()
+        typingTimer = nil
+        
         displayedText = ""  // 重置文本
         var charIndex = 0
-        Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true) { timer in
+        
+        typingTimer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true) { timer in
             if charIndex < fullText.count {
                 let index = fullText.index(fullText.startIndex, offsetBy: charIndex)
                 displayedText += String(fullText[index])
                 charIndex += 1
             } else {
                 timer.invalidate()  // 停止计时器
+                typingTimer = nil
                 // 等待一段时间后重新开始动画
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                     startTypingAnimation()
@@ -197,7 +219,7 @@ struct MoodPage: View {
     }
 }
 
-// 新增：自定义心情滑动条
+// 自定义心情滑动条
 struct MoodSlider: View {
     @Binding var value: Double
     
@@ -211,11 +233,21 @@ struct MoodSlider: View {
                         startPoint: .leading,
                         endPoint: .trailing
                     ))
+                    .overlay(
+                        Capsule()
+                            .stroke(Color.white.opacity(0.3), lineWidth: 1)
+                    )
+                    .shadow(color: .black.opacity(0.2), radius: 3, x: 0, y: 2)
                 
                 // 滑动手柄
                 Circle()
-                    .fill(.white)
+                    .fill(.ultraThinMaterial)
+                    .overlay(
+                        Circle()
+                            .stroke(Color.white.opacity(0.5), lineWidth: 1)
+                    )
                     .frame(width: 30, height: 30)
+                    .shadow(color: .black.opacity(0.3), radius: 5, x: 0, y: 2)
                     .offset(x: (geometry.size.width - 30) * CGFloat(value / 10.0))
                     .gesture(
                         DragGesture()
@@ -229,7 +261,7 @@ struct MoodSlider: View {
     }
 }
 
-// 新增：自定义表情面部
+// 自定义表情面部
 struct MoodFace: View {
     let value: Double
     

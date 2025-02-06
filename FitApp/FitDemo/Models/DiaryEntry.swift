@@ -51,7 +51,13 @@ class DiaryManager {
     }
     
     func saveDiary(_ diary: DiaryEntry) {
-        diaries.append(diary)
+        if let index = diaries.firstIndex(where: { $0.id == diary.id }) {
+            // 更新现有日记
+            diaries[index] = diary
+        } else {
+            // 添加新日记
+            diaries.append(diary)
+        }
         currentDraft = nil
         saveToDisk()
     }
@@ -80,6 +86,8 @@ class DiaryManager {
         if let encoded = try? JSONEncoder().encode(diaries) {
             userDefaults.set(encoded, forKey: diariesKey)
         }
+        // 当保存日记时，清除当前草稿
+        userDefaults.removeObject(forKey: currentDraftKey)
     }
     
     private func loadDiaries() {
@@ -88,6 +96,7 @@ class DiaryManager {
             diaries = decoded
         }
         
+        // 加载草稿
         if let draftData = userDefaults.data(forKey: currentDraftKey),
            let decoded = try? JSONDecoder().decode(DiaryEntry.self, from: draftData) {
             currentDraft = decoded

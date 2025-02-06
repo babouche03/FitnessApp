@@ -8,6 +8,7 @@ struct DiaryEditView: View {
     @State private var selectedVideos: [URL] = []
     @State private var showImagePicker = false
     @State private var showVideoPicker = false
+    @State private var hasEdited = false  // 添加编辑状态跟踪
     
     let isEditing: Bool
     let existingDiary: DiaryEntry?
@@ -76,7 +77,9 @@ struct DiaryEditView: View {
             }
             .navigationBarItems(
                 leading: Button(action: {
-                    saveDiary()
+                    if hasEdited {
+                        saveDiary()
+                    }
                     dismiss()
                 }) {
                     Image(systemName: "arrow.left")
@@ -86,14 +89,23 @@ struct DiaryEditView: View {
             .sheet(isPresented: $showImagePicker) {
                 ImagePicker(selectedImages: $selectedImages)
             }
+            .onChange(of: diaryText) { oldValue, newValue in
+                hasEdited = true
+            }
+            .onChange(of: selectedImages) { oldValue, newValue in
+                hasEdited = true
+            }
+            .onChange(of: selectedVideos) { oldValue, newValue in
+                hasEdited = true
+            }
         }
     }
     
     private func saveDiary() {
         if !diaryText.trim().isEmpty || !selectedImages.isEmpty || !selectedVideos.isEmpty {
             let diary = DiaryEntry(
-                id: existingDiary?.id ?? UUID(),
-                date: currentDate,
+                id: existingDiary?.id ?? UUID(),  // 保持原有ID
+                date: existingDiary?.date ?? Date(),  // 保持原有日期
                 mood: moodValue,
                 content: diaryText,
                 imageData: selectedImages.compactMap { $0.jpegData(compressionQuality: 0.7) },
