@@ -18,6 +18,7 @@
 		B749F22A2CF78C98001595DE /* MyPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B749F2292CF78C98001595DE /* MyPage.swift */; };
 		B771381C2D550DAA00C0456F /* beach.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = B771381B2D550DAA00C0456F /* beach.mp4 */; };
 		B771381E2D550F8200C0456F /* beach.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B771381D2D550F8200C0456F /* beach.mp3 */; };
+		B782B6E02D5655ED0026B324 /* MeditationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B782B6DF2D5655ED0026B324 /* MeditationView.swift */; };
 		B78BC1E12D51161F00848016 /* RestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B78BC1E02D51161F00848016 /* RestView.swift */; };
 		B79076312D4E5A70001CE70C /* HistoryCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B79076302D4E5A70001CE70C /* HistoryCardView.swift */; };
 		B79076332D4E5AA0001CE70C /* HistoryPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B79076322D4E5AA0001CE70C /* HistoryPage.swift */; };
@@ -43,6 +44,7 @@
 		B749F2292CF78C98001595DE /* MyPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPage.swift; sourceTree = "<group>"; };
 		B771381B2D550DAA00C0456F /* beach.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = beach.mp4; sourceTree = "<group>"; };
 		B771381D2D550F8200C0456F /* beach.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = beach.mp3; sourceTree = "<group>"; };
+		B782B6DF2D5655ED0026B324 /* MeditationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeditationView.swift; sourceTree = "<group>"; };
 		B78BC1E02D51161F00848016 /* RestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestView.swift; sourceTree = "<group>"; };
 		B79076302D4E5A70001CE70C /* HistoryCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryCardView.swift; sourceTree = "<group>"; };
 		B79076322D4E5AA0001CE70C /* HistoryPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryPage.swift; sourceTree = "<group>"; };
@@ -127,6 +129,7 @@
 				B71BBA502D4F4BEF00AA71CA /* DiaryEditView.swift */,
 				B78BC1E02D51161F00848016 /* RestView.swift */,
 				B716FBF22D525455005F474F /* FocusView.swift */,
+				B782B6DF2D5655ED0026B324 /* MeditationView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -236,6 +239,7 @@
 			files = (
 				B71BBA532D4F4CC400AA71CA /* DiaryEntry.swift in Sources */,
 				B71BBA512D4F4BEF00AA71CA /* DiaryEditView.swift in Sources */,
+				B782B6E02D5655ED0026B324 /* MeditationView.swift in Sources */,
 				B70E940F2CBD175C005135B9 /* ContentView.swift in Sources */,
 				B70E940D2CBD175C005135B9 /* FitDemoApp.swift in Sources */,
 				B7BAF4D62D4525A100203992 /* Theme.swift in Sources */,

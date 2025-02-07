@@ -7,13 +7,17 @@ struct HistoryPage: View {
     @State private var isDragging = false
     @State private var showDiaryDetail = false
     @State private var selectedDiary: DiaryEntry?
+    @State private var showCalendar = false
     
     var body: some View {
         GeometryReader { geometry in
             let cardHeight = geometry.size.height * 0.35
             let horizontalPadding: CGFloat = 40
             
-            VStack {
+            VStack(spacing: 0) {
+                Spacer()
+                    .frame(height: 120)
+                
                 ZStack {
                     ForEach(-4...4, id: \.self) { relativeIndex in
                         let index = Int(round(activeIndex)) + relativeIndex
@@ -45,6 +49,7 @@ struct HistoryPage: View {
                         }
                     }
                 }
+                .frame(height: geometry.size.height * 0.6)
                 .padding(.horizontal, horizontalPadding)
                 .gesture(
                     DragGesture()
@@ -73,6 +78,22 @@ struct HistoryPage: View {
                     dampingFraction: 0.7,
                     blendDuration: 0.3
                 ), value: activeIndex)
+                
+                Spacer()
+                
+                Button(action: {
+                    showCalendar.toggle()
+                }) {
+                    Image(systemName: "calendar")
+                        .font(.system(size: 24))
+                        .foregroundColor(.white)
+                        .padding()
+                        .background(
+                            Circle()
+                                .fill(.ultraThinMaterial)
+                        )
+                }
+                .padding(.bottom, 20)
             }
             .frame(maxHeight: .infinity)
             .onAppear {
@@ -87,6 +108,9 @@ struct HistoryPage: View {
                 if !newValue {
                     loadDiaries()
                 }
+            }
+            .sheet(isPresented: $showCalendar) {
+                CalendarView(diaries: diaries, activeIndex: $activeIndex, isPresented: $showCalendar)
             }
         }
     }
@@ -164,5 +188,69 @@ struct EmptyCardView: View {
                 )
                 .shadow(color: .black.opacity(0.1), radius: 10, x: 0, y: 5)
         )
+    }
+}
+
+struct CalendarView: View {
+    let diaries: [DiaryEntry]
+    @Binding var activeIndex: Double
+    @Binding var isPresented: Bool
+    @State private var selectedDate: Date
+    
+    init(diaries: [DiaryEntry], activeIndex: Binding<Double>, isPresented: Binding<Bool>) {
+        self.diaries = diaries
+        self._activeIndex = activeIndex
+        self._isPresented = isPresented
+        
+        let currentIndex = Int(activeIndex.wrappedValue)
+        if currentIndex >= 0 && currentIndex < diaries.count {
+            _selectedDate = State(initialValue: diaries[currentIndex].date)
+        } else {
+            _selectedDate = State(initialValue: Date())
+        }
+    }
+    
+    private var dateToIndexMap: [Date: Int] {
+        var map: [Date: Int] = [:]
+        for (index, diary) in diaries.enumerated() {
+            let date = Calendar.current.startOfDay(for: diary.date)
+            if map[date] == nil {
+                map[date] = index
+            }
+        }
+        return map
+    }
+    
+    var body: some View {
+        NavigationView {
+            VStack(spacing: 0) {
+                DatePicker("选择日期", 
+                          selection: $selectedDate,
+                          displayedComponents: [.date])
+                    .datePickerStyle(.graphical)
+                    .environment(\.locale, Locale(identifier: "zh_CN"))
+                    .onChange(of: selectedDate) { _, newDate in
+                        if let index = dateToIndexMap[Calendar.current.startOfDay(for: newDate)] {
+                            activeIndex = Double(index)
+                            isPresented = false
+                        }
+                    }
+                    .padding(.horizontal)
+                    .frame(maxHeight: 400)
+                
+                Spacer(minLength: 0)
+            }
+            .navigationTitle("选择日期")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("关闭") {
+                        isPresented = false
+                    }
+                }
+            }
+        }
+        .presentationDetents([.medium])
+        .presentationCornerRadius(20)
     }
 }

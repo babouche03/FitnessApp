@@ -6,7 +6,10 @@ struct HistoryCardView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 60) {
             HStack {
-                Text(diary.date.formatted(.dateTime.year().month().day()))
+                Text(diary.date.formatted(.dateTime
+                    .locale(Locale(identifier: "zh_CN"))
+                    .year().month().day()
+                ))
                     .font(.headline)
                     .foregroundColor(.white)
                 Spacer()

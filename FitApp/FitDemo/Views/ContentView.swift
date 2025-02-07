@@ -170,7 +170,7 @@ struct HomePage: View {
                                          text: "专注", 
                                          themeManager: themeManager)
                             CircularButton(iconName: "leaf", 
-                                         text: "呼吸", 
+                                         text: "冥想", 
                                          themeManager: themeManager)
                         }
                         .transition(.opacity)
@@ -386,10 +386,12 @@ struct CircularButton: View {
     var text: String
     @State private var showingRestModal = false
     @State private var showingFocusModal = false
+    @State private var showingMeditationModal = false  // 添加冥想模态框状态
     @State private var selectedRestTime: Double = 10
     @State private var selectedRestInterval: Double = 1
     @State private var showRestView = false
     @State private var showFocusView = false
+    @State private var showMeditationView = false  // 添加冥想视图状态
     @State private var disableRestReminder = false
     @ObservedObject var themeManager: ThemeManager
     
@@ -401,6 +403,8 @@ struct CircularButton: View {
                         showingRestModal = true
                     } else if text == "专注" {
                         showingFocusModal = true
+                    } else if text == "冥想" {
+                        showingMeditationModal = true
                     }
                 }) {
                     Image(systemName: iconName)
@@ -443,6 +447,15 @@ struct CircularButton: View {
                 .presentationBackground(.ultraThinMaterial)
                 .presentationCornerRadius(30)
         }
+        .sheet(isPresented: $showingMeditationModal) {
+            MeditationSettingModal(
+                showMeditationView: $showMeditationView,
+                showModal: $showingMeditationModal
+            )
+            .presentationDetents([.height(240)])
+            .presentationBackground(.ultraThinMaterial)
+            .presentationCornerRadius(30)
+        }
         .fullScreenCover(isPresented: $showRestView) {
             RestView(restTime: Int(selectedRestTime), 
                     isPresented: $showRestView,
@@ -453,6 +466,9 @@ struct CircularButton: View {
                 isPresented: $showFocusView,
                 restInterval: disableRestReminder ? 0 : Int(selectedRestInterval)
             )
+        }
+        .fullScreenCover(isPresented: $showMeditationView) {
+            MeditationView(isPresented: $showMeditationView)
         }
     }
 }
@@ -591,14 +607,14 @@ struct FocusSettingModal: View {
             // 时间选择器
             VStack(spacing: 8) {
                 HStack {
-                    Text("休息频次：")
+                    Text("休息频次:")
                         .font(.system(size: 18))
                         .foregroundColor(.white)
                         .padding(.trailing, 10)
                     Text("\(Int(tempSelectedInterval))")
                         .font(.system(size: 32, weight: .bold))
                         .foregroundColor(.primary)
-                    Text("分钟/次")
+                    Text(" 分钟/次")
                         .font(.system(size: 18))
                         .foregroundColor(.white)
                 }
@@ -628,6 +644,62 @@ struct FocusSettingModal: View {
                 }
             }) {
                 Text("专注之旅")
+                    .foregroundColor(.white)
+                    .frame(width: 180, height: 45)
+                    .background(
+                        LinearGradient(
+                            gradient: Gradient(colors: [Color.black.opacity(0.8), Color.gray]),
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                    )
+                    .cornerRadius(22.5)
+                    .shadow(color: .white.opacity(0.3), radius: 5, x: 0, y: 3)
+            }
+            .padding(.vertical)
+        }
+        .padding(.bottom)
+    }
+}
+
+// 冥想设置弹窗
+struct MeditationSettingModal: View {
+    @Binding var showMeditationView: Bool
+    @Binding var showModal: Bool
+    
+    var body: some View {
+        VStack(spacing: 20) {
+            // 标题和关闭按钮
+            HStack {
+                Text("冥想")
+                    .font(.headline)
+                    .foregroundColor(.primary)
+                
+                Spacer()
+                
+                Button(action: {
+                    showModal = false
+                }) {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundColor(.gray)
+                        .font(.system(size: 22))
+                }
+            }
+            .padding(.horizontal)
+            .padding(.top)
+            
+            Text("请确认周边环境\n调整到您舒适的姿势")
+                .foregroundColor(.white)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal)
+            
+            Button(action: {
+                showModal = false
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    showMeditationView = true
+                }
+            }) {
+                Text("开始冥想")
                     .foregroundColor(.white)
                     .frame(width: 180, height: 45)
                     .background(
@@ -692,3 +764,5 @@ struct ContentView_Previews: PreviewProvider {
         ContentView()
     }
 }
+
+
