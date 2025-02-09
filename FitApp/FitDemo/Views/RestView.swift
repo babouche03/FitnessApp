@@ -201,6 +201,7 @@ struct ThemeSelectorView: View {
     @Binding var isShowing: Bool
     @ObservedObject var themeManager: ThemeManager
     @State private var showingExtendedThemes = false
+    @State private var volume: Double = 0.5 // 音量控制状态
     
     var body: some View {
         ZStack {
@@ -230,18 +231,14 @@ struct ThemeSelectorView: View {
                                 .foregroundColor(.white)
                         }
                         .padding(16)
+                        .padding(.top, 16)
                     }
-                    
-                    Spacer()
-                    
-                    Text(showingExtendedThemes ? "More" : "")
-                        .foregroundColor(.white)
-                        .font(.system(size: 18))
                     
                     Spacer()
                     
                     Button(action: {
                         withAnimation {
+                            showingExtendedThemes = false
                             isShowing = false
                         }
                     }) {
@@ -250,8 +247,13 @@ struct ThemeSelectorView: View {
                             .foregroundColor(.white)
                     }
                     .padding(16)
+                    .padding(.top, 16)
                 }
-                .padding(.top, 16)
+                
+                Text(showingExtendedThemes ? "More" : "环境主题")
+                    .foregroundColor(.white)
+                    .font(.system(size: 18))
+                    .padding(.top, 10)
                 
                 if showingExtendedThemes {
                     // 扩展主题网格
@@ -287,7 +289,11 @@ struct ThemeSelectorView: View {
                         }
                     }
                     .padding(.vertical, 20)
+                }
                     
+                Spacer()
+                
+                if !showingExtendedThemes {
                     Button(action: {
                         withAnimation {
                             showingExtendedThemes = true
@@ -301,12 +307,25 @@ struct ThemeSelectorView: View {
                             .background(Color.gray.opacity(0.3))
                             .cornerRadius(15)
                     }
-                    .padding(.vertical, 20)
+                    .padding(.top, 10)
+                    .padding(.bottom, 20)
                 }
+                // 音量控制
+                        HStack {
+                            Image(systemName: "speaker.wave.2")
+                                .foregroundColor(.white)
+                            Slider(value: $volume, in: 0...1) { _ in
+                                themeManager.setVolume(Float(volume))
+                            }
+                            .accentColor(.white)
+                        }
+                        .padding(.horizontal, 30)
+                        .padding(.bottom, 40)
             }
-            .frame(width: 280)
+            .frame(width: 280, height: 530)
             .background(Color.black.opacity(0.7))
             .cornerRadius(20)
+            .shadow(radius: 10)
         }
     }
 }

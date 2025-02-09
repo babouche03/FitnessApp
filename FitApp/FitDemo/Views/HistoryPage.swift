@@ -1,5 +1,26 @@
 import SwiftUI
 
+class HapticManager {
+    static let shared = HapticManager()
+    
+    private let selectionFeedback = UISelectionFeedbackGenerator()
+    private let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+    
+    private init() {
+        // 预热触觉引擎
+        selectionFeedback.prepare()
+        impactFeedback.prepare()
+    }
+    
+    func playSelectionHaptic() {
+        selectionFeedback.selectionChanged()
+    }
+    
+    func playLightImpact() {
+        impactFeedback.impactOccurred()
+    }
+}
+
 struct HistoryPage: View {
     @State private var diaries: [DiaryEntry] = []
     @State private var activeIndex: Double = 0
@@ -8,92 +29,183 @@ struct HistoryPage: View {
     @State private var showDiaryDetail = false
     @State private var selectedDiary: DiaryEntry?
     @State private var showCalendar = false
+    @State private var cardOffset: CGFloat = 0
+    @State private var showDeleteConfirmation = false
+    @State private var showBurningAnimation = false
+    @State private var diaryToDelete: DiaryEntry?
+    @State private var isDeleting = false
+    @State private var lastActiveIndex: Int = 0
     
     var body: some View {
         GeometryReader { geometry in
             let cardHeight = geometry.size.height * 0.35
             let horizontalPadding: CGFloat = 40
             
-            VStack(spacing: 0) {
-                Spacer()
-                    .frame(height: 120)
-                
-                ZStack {
-                    ForEach(-4...4, id: \.self) { relativeIndex in
-                        let index = Int(round(activeIndex)) + relativeIndex
-                        
-                        if index >= 0 && index < diaries.count {
-                            HistoryCardView(diary: diaries[index])
-                                .frame(
-                                    width: geometry.size.width - (horizontalPadding * 2),
-                                    height: cardHeight
-                                )
-                                .offset(y: calculateOffset(for: Double(relativeIndex) - (activeIndex - round(activeIndex))))
-                                .scaleEffect(calculateScale(for: Double(relativeIndex) - (activeIndex - round(activeIndex))))
-                                .opacity(calculateOpacity(for: Double(relativeIndex) - (activeIndex - round(activeIndex))))
-                                .zIndex(calculateZIndex(for: Double(relativeIndex) - (activeIndex - round(activeIndex))))
-                                .onTapGesture {
-                                    selectedDiary = diaries[index]
-                                    showDiaryDetail = true
+            ZStack {
+                VStack(spacing: 0) {
+                    Spacer()
+                        .frame(height: 120)
+                    
+                    ZStack {
+                        ForEach(-4...4, id: \.self) { relativeIndex in
+                            let index = Int(round(activeIndex)) + relativeIndex
+                            
+                            if index >= 0 && index < diaries.count {
+                                ZStack {
+                                    if cardOffset < -50 && !isDeleting && index == Int(round(activeIndex)) {
+                                        HStack {
+                                            Spacer()
+                                            Image(systemName: "flame.fill")
+                                                .font(.system(size: 50))
+                                                .foregroundColor(.red)
+                                                .transition(.scale.combined(with: .opacity))
+                                                .padding(.trailing, -58)
+                                                .onTapGesture {
+                                                    diaryToDelete = diaries[index]
+                                                    showDeleteConfirmation = true
+                                                }
+                                        }
+                                        .frame(width: geometry.size.width - (horizontalPadding * 2))
+                                        .zIndex(2)
+                                    }
+                                    
+                                    HistoryCardView(diary: diaries[index])
+                                        .frame(
+                                            width: geometry.size.width - (horizontalPadding * 2),
+                                            height: cardHeight
+                                        )
+                                        .onTapGesture {
+                                            if cardOffset == 0 && index == Int(round(activeIndex)) {
+                                                selectedDiary = diaries[index]
+                                                showDiaryDetail = true
+                                            }
+                                        }
                                 }
-                        } else {
-                            EmptyCardView()
-                                .frame(
-                                    width: geometry.size.width - (horizontalPadding * 2),
-                                    height: cardHeight
-                                )
-                                .offset(y: calculateOffset(for: Double(relativeIndex) - (activeIndex - round(activeIndex))))
+                                .offset(x: index == Int(round(activeIndex)) ? cardOffset : 0,
+                                        y: calculateOffset(for: Double(relativeIndex) - (activeIndex - round(activeIndex))))
                                 .scaleEffect(calculateScale(for: Double(relativeIndex) - (activeIndex - round(activeIndex))))
                                 .opacity(calculateOpacity(for: Double(relativeIndex) - (activeIndex - round(activeIndex))))
                                 .zIndex(calculateZIndex(for: Double(relativeIndex) - (activeIndex - round(activeIndex))))
-                        }
-                    }
-                }
-                .frame(height: geometry.size.height * 0.6)
-                .padding(.horizontal, horizontalPadding)
-                .gesture(
-                    DragGesture()
-                        .onChanged { value in
-                            isDragging = true
-                            let newIndex = activeIndex - value.translation.height / 80 + dragOffset / 80
-                            let maxIndex = max(4.0, Double(diaries.count - 1))
-                            activeIndex = max(0, min(newIndex, maxIndex))
-                            dragOffset = value.translation.height
-                        }
-                        .onEnded { value in
-                            isDragging = false
-                            let velocity = value.predictedEndTranslation.height - value.translation.height
-                            withAnimation(.spring(
-                                response: 0.5,
-                                dampingFraction: 0.7,
-                                blendDuration: 0.3
-                            )) {
-                                handleDragEnd(velocity: velocity)
-                                dragOffset = 0
+                                .gesture(
+                                    DragGesture()
+                                        .onChanged { value in
+                                            if index == Int(round(activeIndex)) {
+                                                if abs(value.translation.width) > abs(value.translation.height) {
+                                                    cardOffset = value.translation.width
+                                                }
+                                            }
+                                        }
+                                        .onEnded { value in
+                                            if index == Int(round(activeIndex)) {
+                                                withAnimation(.spring()) {
+                                                    if cardOffset < -100 {
+                                                        cardOffset = -100
+                                                    } else {
+                                                        cardOffset = 0
+                                                    }
+                                                }
+                                            }
+                                        }
+                                )
+                                .simultaneousGesture(
+                                    DragGesture()
+                                        .onChanged { value in
+                                            isDragging = true
+                                            if abs(value.translation.height) > abs(value.translation.width) {
+                                                let newIndex = activeIndex - value.translation.height / 80 + dragOffset / 80
+                                                let maxIndex = max(4.0, Double(diaries.count - 1))
+                                                activeIndex = max(0, min(newIndex, maxIndex))
+                                                
+                                                let currentIndex = Int(round(activeIndex))
+                                                if currentIndex != lastActiveIndex {
+                                                    HapticManager.shared.playLightImpact()
+                                                    lastActiveIndex = currentIndex
+                                                }
+                                                
+                                                dragOffset = value.translation.height
+                                            }
+                                        }
+                                        .onEnded { value in
+                                            isDragging = false
+                                            let velocity = value.predictedEndTranslation.height - value.translation.height
+                                            withAnimation(.spring(
+                                                response: 0.5,
+                                                dampingFraction: 0.7,
+                                                blendDuration: 0.3
+                                            )) {
+                                                handleDragEnd(velocity: velocity)
+                                                dragOffset = 0
+                                                
+                                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                                    lastActiveIndex = Int(round(activeIndex))
+                                                }
+                                            }
+                                        }
+                                )
+                            } else {
+                                EmptyCardView()
+                                    .frame(
+                                        width: geometry.size.width - (horizontalPadding * 2),
+                                        height: cardHeight
+                                    )
+                                    .offset(y: calculateOffset(for: Double(relativeIndex) - (activeIndex - round(activeIndex))))
+                                    .scaleEffect(calculateScale(for: Double(relativeIndex) - (activeIndex - round(activeIndex))))
+                                    .opacity(calculateOpacity(for: Double(relativeIndex) - (activeIndex - round(activeIndex))))
+                                    .zIndex(calculateZIndex(for: Double(relativeIndex) - (activeIndex - round(activeIndex))))
                             }
                         }
-                )
-                .animation(.interactiveSpring(
-                    response: 0.5,
-                    dampingFraction: 0.7,
-                    blendDuration: 0.3
-                ), value: activeIndex)
-                
-                Spacer()
-                
-                Button(action: {
-                    showCalendar.toggle()
-                }) {
-                    Image(systemName: "calendar")
-                        .font(.system(size: 24))
-                        .foregroundColor(.white)
-                        .padding()
-                        .background(
-                            Circle()
-                                .fill(.ultraThinMaterial)
-                        )
+                    }
+                    .frame(height: geometry.size.height * 0.6)
+                    .padding(.horizontal, horizontalPadding)
+                    .gesture(
+                        DragGesture()
+                            .onChanged { value in
+                                isDragging = true
+                                let newIndex = activeIndex - value.translation.height / 80 + dragOffset / 80
+                                let maxIndex = max(4.0, Double(diaries.count - 1))
+                                activeIndex = max(0, min(newIndex, maxIndex))
+                                dragOffset = value.translation.height
+                            }
+                            .onEnded { value in
+                                isDragging = false
+                                let velocity = value.predictedEndTranslation.height - value.translation.height
+                                withAnimation(.spring(
+                                    response: 0.5,
+                                    dampingFraction: 0.7,
+                                    blendDuration: 0.3
+                                )) {
+                                    handleDragEnd(velocity: velocity)
+                                    dragOffset = 0
+                                }
+                            }
+                    )
+                    .animation(.interactiveSpring(
+                        response: 0.5,
+                        dampingFraction: 0.7,
+                        blendDuration: 0.3
+                    ), value: activeIndex)
+                    
+                    Spacer()
+                    
+                    Button(action: {
+                        showCalendar.toggle()
+                    }) {
+                        Image(systemName: "calendar")
+                            .font(.system(size: 24))
+                            .foregroundColor(.white)
+                            .padding()
+                            .background(
+                                Circle()
+                                    .fill(.ultraThinMaterial)
+                            )
+                    }
+                    .padding(.bottom, 20)
                 }
-                .padding(.bottom, 20)
+                
+                if showBurningAnimation {
+                    BurningAnimationView()
+                        .ignoresSafeArea()
+                }
             }
             .frame(maxHeight: .infinity)
             .onAppear {
@@ -112,12 +224,21 @@ struct HistoryPage: View {
             .sheet(isPresented: $showCalendar) {
                 CalendarView(diaries: diaries, activeIndex: $activeIndex, isPresented: $showCalendar)
             }
+            .alert("确认烧毁该记录", isPresented: $showDeleteConfirmation) {
+                Button("取消", role: .cancel) {
+                    withAnimation {
+                        cardOffset = 0
+                    }
+                }
+                Button("删除", role: .destructive) {
+                    deleteDiary()
+                }
+            }
         }
     }
     
     private func loadDiaries() {
         diaries = DiaryManager.shared.getAllDiaries()
-        // 保持当前查看的日记位置
         if let selectedDiaryId = selectedDiary?.id,
            let index = diaries.firstIndex(where: { $0.id == selectedDiaryId }) {
             activeIndex = Double(index)
@@ -150,6 +271,26 @@ struct HistoryPage: View {
     
     private func calculateZIndex(for relativePosition: Double) -> Double {
         return Double(100) - abs(relativePosition) * 20
+    }
+    
+    private func deleteDiary() {
+        guard let diary = diaryToDelete else { return }
+        isDeleting = true
+        
+        withAnimation {
+            showBurningAnimation = true
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            DiaryManager.shared.deleteDiary(withId: diary.id)
+            loadDiaries()
+            
+            withAnimation {
+                showBurningAnimation = false
+                cardOffset = 0
+                isDeleting = false
+            }
+        }
     }
 }
 
@@ -252,5 +393,33 @@ struct CalendarView: View {
         }
         .presentationDetents([.medium])
         .presentationCornerRadius(20)
+    }
+}
+
+struct BurningAnimationView: View {
+    @State private var scale: CGFloat = 0.1
+    @State private var opacity: Double = 0
+    
+    var body: some View {
+        ZStack {
+            Color.black.opacity(0.3)
+            
+            ForEach(0..<20) { _ in
+                Image(systemName: "flame.fill")
+                    .font(.system(size: 100))
+                    .foregroundColor(.orange)
+                    .rotationEffect(.degrees(Double.random(in: -30...30)))
+                    .offset(x: CGFloat.random(in: -100...100),
+                            y: CGFloat.random(in: -200...200))
+                    .scaleEffect(scale)
+                    .opacity(opacity)
+            }
+        }
+        .onAppear {
+            withAnimation(.easeInOut(duration: 1.0)) {
+                scale = 1.5
+                opacity = 0.8
+            }
+        }
     }
 }

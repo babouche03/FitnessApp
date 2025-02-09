@@ -82,6 +82,13 @@ class DiaryManager {
         return diaries.sorted { $0.date > $1.date }
     }
     
+    func deleteDiary(withId id: UUID) {
+        if let index = diaries.firstIndex(where: { $0.id == id }) {
+            diaries.remove(at: index)
+            saveToDisk()
+        }
+    }
+    
     private func saveToDisk() {
         if let encoded = try? JSONEncoder().encode(diaries) {
             userDefaults.set(encoded, forKey: diariesKey)
