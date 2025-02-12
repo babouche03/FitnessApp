@@ -16,6 +16,8 @@
 		B71BBA532D4F4CC400AA71CA /* DiaryEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71BBA522D4F4CC400AA71CA /* DiaryEntry.swift */; };
 		B749F2282CF7888F001595DE /* MoodPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B749F2272CF7888F001595DE /* MoodPage.swift */; };
 		B749F22A2CF78C98001595DE /* MyPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B749F2292CF78C98001595DE /* MyPage.swift */; };
+		B74A01DF2D58FE04008EEF02 /* hike.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B74A01DE2D58FE04008EEF02 /* hike.mp3 */; };
+		B75B33812D58D04A00CBBD18 /* meditation.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B75B33802D58D04A00CBBD18 /* meditation.mp3 */; };
 		B771381C2D550DAA00C0456F /* beach.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = B771381B2D550DAA00C0456F /* beach.mp4 */; };
 		B771381E2D550F8200C0456F /* beach.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B771381D2D550F8200C0456F /* beach.mp3 */; };
 		B782B6E02D5655ED0026B324 /* MeditationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B782B6DF2D5655ED0026B324 /* MeditationView.swift */; };
@@ -42,6 +44,8 @@
 		B71BBA522D4F4CC400AA71CA /* DiaryEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiaryEntry.swift; sourceTree = "<group>"; };
 		B749F2272CF7888F001595DE /* MoodPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoodPage.swift; sourceTree = "<group>"; };
 		B749F2292CF78C98001595DE /* MyPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPage.swift; sourceTree = "<group>"; };
+		B74A01DE2D58FE04008EEF02 /* hike.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = hike.mp3; sourceTree = "<group>"; };
+		B75B33802D58D04A00CBBD18 /* meditation.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = meditation.mp3; sourceTree = "<group>"; };
 		B771381B2D550DAA00C0456F /* beach.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = beach.mp4; sourceTree = "<group>"; };
 		B771381D2D550F8200C0456F /* beach.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = beach.mp3; sourceTree = "<group>"; };
 		B782B6DF2D5655ED0026B324 /* MeditationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeditationView.swift; sourceTree = "<group>"; };
@@ -154,6 +158,8 @@
 		B7BAF4DD2D45330100203992 /* ThemeAudios */ = {
 			isa = PBXGroup;
 			children = (
+				B74A01DE2D58FE04008EEF02 /* hike.mp3 */,
+				B75B33802D58D04A00CBBD18 /* meditation.mp3 */,
 				B771381D2D550F8200C0456F /* beach.mp3 */,
 				B7B5D5AD2D47B6E600511BC6 /* rain.mp3 */,
 				B7BAF4DE2D45331A00203992 /* forest.mp3 */,
@@ -220,12 +226,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				B70E94142CBD175F005135B9 /* Preview Assets.xcassets in Resources */,
+				B74A01DF2D58FE04008EEF02 /* hike.mp3 in Resources */,
 				B79C79A92D50C77E00962C19 /* bonfire.mp4 in Resources */,
 				B771381E2D550F8200C0456F /* beach.mp3 in Resources */,
 				B7B5D5AE2D47B6E600511BC6 /* rain.mp3 in Resources */,
 				B7B5D5AC2D47B6CD00511BC6 /* rain.mp4 in Resources */,
 				B771381C2D550DAA00C0456F /* beach.mp4 in Resources */,
 				B7BAF4DF2D45331A00203992 /* forest.mp3 in Resources */,
+				B75B33812D58D04A00CBBD18 /* meditation.mp3 in Resources */,
 				B70E94112CBD175F005135B9 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

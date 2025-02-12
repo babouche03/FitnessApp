@@ -60,7 +60,7 @@ struct CustomTabBar: View {
                 selectedTab = 0
             }
             
-            TabBarButton(iconName: "globe.americas", title: "", isSelected: selectedTab == 1) {
+            TabBarButton(iconName: "heart.text.square", title: "", isSelected: selectedTab == 1) {
                 selectedTab = 1
             }
             
@@ -468,7 +468,7 @@ struct CircularButton: View {
             )
         }
         .fullScreenCover(isPresented: $showMeditationView) {
-            MeditationView(isPresented: $showMeditationView)
+            MeditationView(isPresented: $showMeditationView, themeManager: themeManager)
         }
     }
 }

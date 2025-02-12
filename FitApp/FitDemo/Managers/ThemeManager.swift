@@ -145,4 +145,27 @@ class ThemeManager: ObservableObject {
     func resumeAudio() {
         audioPlayer?.play()
     }
+    
+    func playMeditationAudio() {
+        // 停止当前播放的音频
+        audioPlayer?.stop()
+        
+        // 获取冥想音频文件路径
+        guard let audioPath = Bundle.main.path(forResource: "meditation", ofType: "mp3") else {
+            print("找不到冥想音频文件: meditation.mp3")
+            return
+        }
+        
+        do {
+            let audioUrl = URL(fileURLWithPath: audioPath)
+            audioPlayer = try AVAudioPlayer(contentsOf: audioUrl)
+            audioPlayer?.numberOfLoops = -1 // 无限循环
+            audioPlayer?.volume = 0.5 // 默认音量
+            audioPlayer?.prepareToPlay()
+            audioPlayer?.play()
+            print("开始播放冥想音频")
+        } catch {
+            print("播放冥想音频失败: \(error.localizedDescription)")
+        }
+    }
 }
