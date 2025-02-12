@@ -8,7 +8,10 @@ struct DiaryEditView: View {
     @State private var selectedVideos: [URL] = []
     @State private var showImagePicker = false
     @State private var showVideoPicker = false
-    @State private var hasEdited = false  // 添加编辑状态跟踪
+    @State private var hasEdited = false
+    @State private var selectedImageForPreview: UIImage? = nil
+    @State private var showDeleteAlert = false
+    @State private var imageIndexToDelete: Int? = nil
     
     let isEditing: Bool
     let existingDiary: DiaryEntry?
@@ -28,76 +31,139 @@ struct DiaryEditView: View {
     }
     
     var body: some View {
-        NavigationView {
-            VStack {
-                // 顶部日期时间显示
-                HStack {
-                    Text(currentDate.formatted(.dateTime.year().month().day().hour().minute()))
-                        .font(.headline)
-                    Spacer()
-                    Text("心情指数: \(String(format: "%.1f", moodValue))")
-                        .font(.subheadline)
-                }
-                .padding()
-                
-                // 日记编辑区域
-                TextEditor(text: $diaryText)
-                    .frame(maxHeight: .infinity)
-                    .padding()
-                    .background(Color.gray.opacity(0.1))
-                    .cornerRadius(10)
-                
-                // 媒体内容预览区
-                ScrollView(.horizontal) {
+        ZStack {
+            NavigationView {
+                VStack {
+                    // 顶部日期时间显示
                     HStack {
-                        ForEach(selectedImages, id: \.self) { image in
-                            Image(uiImage: image)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(height: 100)
-                                .cornerRadius(8)
+                        Text(currentDate.formatted(.dateTime.year().month().day().hour().minute()))
+                            .font(.headline)
+                        Spacer()
+                        Text("心情指数: \(String(format: "%.1f", moodValue))")
+                            .font(.subheadline)
+                    }
+                    .padding()
+                    
+                    // 日记编辑区域
+                    TextEditor(text: $diaryText)
+                        .frame(maxHeight: .infinity)
+                        .padding()
+                        .background(Color.gray.opacity(0.1))
+                        .cornerRadius(10)
+                    
+                    // 媒体内容预览区
+                    ScrollView(.horizontal) {
+                        HStack {
+                            ForEach(selectedImages.indices, id: \.self) { index in
+                                ZStack(alignment: .topTrailing) {
+                                    Image(uiImage: selectedImages[index])
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(height: 100)
+                                        .cornerRadius(8)
+                                        .onTapGesture {
+                                            selectedImageForPreview = selectedImages[index]
+                                        }
+                                    
+                                    // 删除按钮
+                                    Button(action: {
+                                        imageIndexToDelete = index
+                                        showDeleteAlert = true
+                                    }) {
+                                        Image(systemName: "xmark.circle.fill")
+                                            .foregroundColor(.red)
+                                            .background(Color.white.clipShape(Circle()))
+                                    }
+                                    .padding(4)
+                                }
+                            }
+                        }
+                        .padding()
+                    }
+                    
+                    // 底部工具栏
+                    HStack {
+                        Button(action: { showImagePicker = true }) {
+                            Image(systemName: "photo")
+                                .font(.title2)
+                        }
+                        
+                        Button(action: { showVideoPicker = true }) {
+                            Image(systemName: "video")
+                                .font(.title2)
                         }
                     }
                     .padding()
                 }
-                
-                // 底部工具栏
-                HStack {
-                    Button(action: { showImagePicker = true }) {
-                        Image(systemName: "photo")
+                .navigationBarItems(
+                    leading: Button(action: {
+                        if hasEdited {
+                            saveDiary()
+                        }
+                        dismiss()
+                    }) {
+                        Image(systemName: "arrow.left")
                             .font(.title2)
                     }
-                    
-                    Button(action: { showVideoPicker = true }) {
-                        Image(systemName: "video")
-                            .font(.title2)
-                    }
+                )
+                .sheet(isPresented: $showImagePicker) {
+                    ImagePicker(selectedImages: $selectedImages)
                 }
-                .padding()
             }
-            .navigationBarItems(
-                leading: Button(action: {
-                    if hasEdited {
-                        saveDiary()
+            
+            // 图片预览覆盖层
+            if let previewImage = selectedImageForPreview {
+                Color.black
+                    .edgesIgnoringSafeArea(.all)
+                    .opacity(0.9)
+                    .overlay(
+                        ZStack {
+                            Image(uiImage: previewImage)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            
+                            // 关闭按钮
+                            VStack {
+                                HStack {
+                                    Spacer()
+                                    Button(action: {
+                                        selectedImageForPreview = nil
+                                    }) {
+                                        Image(systemName: "xmark.circle.fill")
+                                            .font(.title)
+                                            .foregroundColor(.white)
+                                            .padding()
+                                    }
+                                }
+                                Spacer()
+                            }
+                        }
+                    )
+                    .onTapGesture {
+                        selectedImageForPreview = nil
                     }
-                    dismiss()
-                }) {
-                    Image(systemName: "arrow.left")
-                        .font(.title2)
+            }
+        }
+        .alert("确认删除", isPresented: $showDeleteAlert) {
+            Button("取消", role: .cancel) { }
+            Button("删除", role: .destructive) {
+                if let index = imageIndexToDelete {
+                    selectedImages.remove(at: index)
+                    hasEdited = true
                 }
-            )
-            .sheet(isPresented: $showImagePicker) {
-                ImagePicker(selectedImages: $selectedImages)
             }
-            .onChange(of: diaryText) { oldValue, newValue in
-                hasEdited = true
-            }
-            .onChange(of: selectedImages) { oldValue, newValue in
-                hasEdited = true
-            }
-            .onChange(of: selectedVideos) { oldValue, newValue in
-                hasEdited = true
-            }
+        } message: {
+            Text("确定要删除这张图片吗？")
+        }
+        .onChange(of: diaryText) { oldValue, newValue in
+            hasEdited = true
+        }
+        .onChange(of: selectedImages) { oldValue, newValue in
+            hasEdited = true
+        }
+        .onChange(of: selectedVideos) { oldValue, newValue in
+            hasEdited = true
         }
     }
     

@@ -472,7 +472,7 @@ struct CircularButton: View {
         }
     }
 }
-
+// 休息设置弹窗
 struct RestSettingModal: View {
     @Binding var selectedTime: Double
     @Binding var showRestView: Bool
