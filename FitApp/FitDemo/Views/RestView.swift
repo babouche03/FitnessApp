@@ -3,16 +3,18 @@ import AVFoundation
 import UserNotifications
 
 struct RestView: View {
-    let restTime: Int
+    let initialRestTime: Int
     @Binding var isPresented: Bool
     @State private var timeRemaining: Int
     @State private var timer: Timer?
     @State private var showThemeSelector = false
     @ObservedObject var parentThemeManager: ThemeManager
     @StateObject private var localThemeManager = ThemeManager()
+    @State private var actualRestTime: Int = 0
+    @State private var showingCompletionAlert = false
     
     init(restTime: Int, isPresented: Binding<Bool>, parentThemeManager: ThemeManager) {
-        self.restTime = restTime
+        self.initialRestTime = restTime
         self._isPresented = isPresented
         self._timeRemaining = State(initialValue: restTime * 60)
         self._parentThemeManager = ObservedObject(wrappedValue: parentThemeManager)
@@ -75,8 +77,8 @@ struct RestView: View {
                         .padding()
                     
                     Button(action: {
-                        timer?.invalidate()
-                        isPresented = false
+                        showingCompletionAlert = true  // 显示统计弹窗
+                        timer?.invalidate()  // 停止计时器
                     }) {
                         Text("结束休息")
                             .foregroundColor(.white)
@@ -98,6 +100,18 @@ struct RestView: View {
             .ignoresSafeArea()
         }
         .ignoresSafeArea()
+        .alert("休息成果", isPresented: $showingCompletionAlert) {
+            Button("返回首页") {
+                // 只有超过1分钟才记录
+                let minutes = actualRestTime / 60
+                if minutes >= 1 {
+                    StatsManager.shared.updateStats(restTime: minutes * 60)
+                }
+                isPresented = false
+            }
+        } message: {
+            Text("本次休息时长: \(formatTime(actualRestTime))")
+        }
         .onAppear {
             // 设置默认主题（森林）
             localThemeManager.switchTheme(to: 0)
@@ -138,18 +152,20 @@ struct RestView: View {
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
             if timeRemaining > 0 {
                 timeRemaining -= 1
+                actualRestTime += 1
             } else {
                 timer?.invalidate()
-                // 播放系统提示音
-                AudioServicesPlaySystemSound(1005) // 系统提示音ID
-                // 发送通知
-                scheduleNotification()
-                // 延迟关闭页面
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    isPresented = false
-                }
+                AudioServicesPlaySystemSound(1005)
+                showingCompletionAlert = true  // 显示统计弹窗
             }
         }
+    }
+    
+    private func formatTime(_ seconds: Int) -> String {
+        let hours = seconds / 3600
+        let minutes = (seconds % 3600) / 60
+        let seconds = seconds % 60
+        return String(format: "%02d:%02d:%02d", hours, minutes, seconds)
     }
 }
 

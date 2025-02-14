@@ -160,8 +160,12 @@ struct FocusView: View {
         }
         .alert("专注成果", isPresented: $showingCompletionAlert) {
             Button("返回首页") {
+                // 只有超过1分钟才记录，并按分钟取整
+                let minutes = focusTime / 60
+                if minutes >= 1 {
+                    StatsManager.shared.updateStats(focusTime: minutes * 60)
+                }
                 timer?.invalidate()
-                UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
                 isPresented = false
             }
         } message: {

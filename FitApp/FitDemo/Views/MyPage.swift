@@ -18,7 +18,7 @@ struct MyPage: View {
                     Text("\"数据只是路标，感受才是旅程\"")
                         .font(.title2)
                         .foregroundColor(.white)
-                        .padding(.bottom, 40)
+                        .padding(.bottom, 35)
                     // 今日数据卡片
                     DailyStatsCard(selectedDate: $selectedDate, showDatePicker: $showDatePicker)
                     
@@ -37,7 +37,7 @@ struct MyPage: View {
         .alert("确认清除数据", isPresented: $showClearDataAlert) {
             Button("取消", role: .cancel) { }
             Button("确认清除", role: .destructive) {
-                // TODO: 实现清除数据的逻辑
+                StatsManager.shared.clearAllStats()
             }
         } message: {
             Text("此操作将清除所有用户数据，且不可恢复。确认继续吗？")
@@ -49,6 +49,7 @@ struct MyPage: View {
 struct DailyStatsCard: View {
     @Binding var selectedDate: Date
     @Binding var showDatePicker: Bool
+    @StateObject private var statsManager = StatsManager.shared
     
     var body: some View {
         VStack(spacing: 15) {
@@ -74,9 +75,16 @@ struct DailyStatsCard: View {
                 GridItem(.flexible()),
                 GridItem(.flexible())
             ], spacing: 20) {
-                StatItem(title: "专注时间", value: "2小时", icon: "timer")
-                StatItem(title: "放松时间", value: "1小时", icon: "leaf.fill")
-                StatItem(title: "冥想时间", value: "30分钟", icon: "brain.head.profile")
+                let stats = statsManager.getStats(for: selectedDate)
+                StatItem(title: "专注时间", 
+                        value: formatTime(stats.focusTime), 
+                        icon: "timer")
+                StatItem(title: "休息时间", 
+                        value: formatTime(stats.restTime), 
+                        icon: "leaf.fill")
+                StatItem(title: "冥想时间", 
+                        value: formatTime(stats.meditationTime), 
+                        icon: "brain.head.profile")
             }
         }
         .padding()
@@ -87,33 +95,98 @@ struct DailyStatsCard: View {
         //         .stroke(Color.black.opacity(0.3), lineWidth: 1)
         // )
     }
+    
+    private func formatTime(_ seconds: Int) -> String {
+        let hours = seconds / 3600
+        let minutes = (seconds % 3600) / 60
+        if hours > 0 {
+            return "\(hours)小时"
+        } else {
+            return "\(minutes)分钟"
+        }
+    }
 }
 
 // 累计数据卡片
 struct TotalStatsCard: View {
+    @StateObject private var statsManager = StatsManager.shared
+    
     var body: some View {
-        VStack(alignment: .leading, spacing: 15) {
+        VStack(alignment: .leading, spacing: 20) {
             Text("累计数据")
                 .font(.headline)
                 .foregroundColor(.white)
             
-            LazyVGrid(columns: [
-                GridItem(.flexible()),
-                GridItem(.flexible()),
-                GridItem(.flexible())
-            ], spacing: 20) {
-                StatItem(title: "总专注", value: "100小时", icon: "timer")
-                StatItem(title: "总放松", value: "50小时", icon: "leaf.fill")
-                StatItem(title: "总冥想", value: "20小时", icon: "brain.head.profile")
+            HStack(spacing: 15) {
+                let totalStats = statsManager.getTotalStats()
+                
+                StatItemHorizontal(
+                    title: "总专注",
+                    value: formatTime(totalStats.focusTime),
+                    icon: "timer",
+                    color: Color.green.opacity(0.4)
+                )
+                
+                StatItemHorizontal(
+                    title: "总休息",
+                    value: formatTime(totalStats.restTime),
+                    icon: "leaf.fill",
+                    color: Color.blue.opacity(0.4)
+                )
+                
+                StatItemHorizontal(
+                    title: "总冥想",
+                    value: formatTime(totalStats.meditationTime),
+                    icon: "brain.head.profile",
+                    color: Color.purple.opacity(0.4)
+                )
             }
         }
         .padding()
         .background(.ultraThinMaterial)
         .cornerRadius(20)
-        // .overlay(
-        //     RoundedRectangle(cornerRadius: 20)
-        //         .stroke(Color.black.opacity(0.3), lineWidth: 1)
-        // )
+    }
+    
+    private func formatTime(_ seconds: Int) -> String {
+        let hours = seconds / 3600
+        if hours > 0 {
+            return "\(hours)小时"
+        } else {
+            let minutes = seconds / 60
+            return "\(minutes)分钟"
+        }
+    }
+}
+
+// 新的水平布局统计项组件
+struct StatItemHorizontal: View {
+    let title: String
+    let value: String
+    let icon: String
+    let color: Color
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            // 图标和标题
+            HStack(spacing: 8) {
+                Image(systemName: icon)
+                    .font(.system(size: 14))
+                    .foregroundColor(.white)
+                Text(title)
+                    .font(.caption)
+                    .foregroundColor(.white.opacity(0.8))
+            }
+            
+            // 数值
+            Text(value)
+                .font(.title3)
+                .fontWeight(.bold)
+                .foregroundColor(.white)
+        }
+        .padding()
+        .frame(maxWidth: .infinity)
+        .background(color)
+        .cornerRadius(15)
     }
 }
 

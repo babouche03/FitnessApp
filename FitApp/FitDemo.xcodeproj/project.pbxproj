@@ -14,6 +14,8 @@
 		B716FBF32D525455005F474F /* FocusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B716FBF22D525455005F474F /* FocusView.swift */; };
 		B71BBA512D4F4BEF00AA71CA /* DiaryEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71BBA502D4F4BEF00AA71CA /* DiaryEditView.swift */; };
 		B71BBA532D4F4CC400AA71CA /* DiaryEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71BBA522D4F4CC400AA71CA /* DiaryEntry.swift */; };
+		B74045792D5DE862002C6C21 /* StatsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B74045782D5DE862002C6C21 /* StatsManager.swift */; };
+		B74873132D5E57AF006C98A8 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B74873122D5E57AF006C98A8 /* Launch Screen.storyboard */; };
 		B749F2282CF7888F001595DE /* MoodPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B749F2272CF7888F001595DE /* MoodPage.swift */; };
 		B749F22A2CF78C98001595DE /* MyPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B749F2292CF78C98001595DE /* MyPage.swift */; };
 		B74A01DF2D58FE04008EEF02 /* hike.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B74A01DE2D58FE04008EEF02 /* hike.mp3 */; };
@@ -42,6 +44,8 @@
 		B716FBF22D525455005F474F /* FocusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusView.swift; sourceTree = "<group>"; };
 		B71BBA502D4F4BEF00AA71CA /* DiaryEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiaryEditView.swift; sourceTree = "<group>"; };
 		B71BBA522D4F4CC400AA71CA /* DiaryEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiaryEntry.swift; sourceTree = "<group>"; };
+		B74045782D5DE862002C6C21 /* StatsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsManager.swift; sourceTree = "<group>"; };
+		B74873122D5E57AF006C98A8 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		B749F2272CF7888F001595DE /* MoodPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoodPage.swift; sourceTree = "<group>"; };
 		B749F2292CF78C98001595DE /* MyPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPage.swift; sourceTree = "<group>"; };
 		B74A01DE2D58FE04008EEF02 /* hike.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = hike.mp3; sourceTree = "<group>"; };
@@ -99,6 +103,7 @@
 				B70E94102CBD175F005135B9 /* Assets.xcassets */,
 				B7BAF4DD2D45330100203992 /* ThemeAudios */,
 				B70E94122CBD175F005135B9 /* Preview Content */,
+				B74873122D5E57AF006C98A8 /* Launch Screen.storyboard */,
 			);
 			path = FitDemo;
 			sourceTree = "<group>";
@@ -151,6 +156,7 @@
 			isa = PBXGroup;
 			children = (
 				B7BAF4D72D4525B800203992 /* ThemeManager.swift */,
+				B74045782D5DE862002C6C21 /* StatsManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -231,6 +237,7 @@
 				B771381E2D550F8200C0456F /* beach.mp3 in Resources */,
 				B7B5D5AE2D47B6E600511BC6 /* rain.mp3 in Resources */,
 				B7B5D5AC2D47B6CD00511BC6 /* rain.mp4 in Resources */,
+				B74873132D5E57AF006C98A8 /* Launch Screen.storyboard in Resources */,
 				B771381C2D550DAA00C0456F /* beach.mp4 in Resources */,
 				B7BAF4DF2D45331A00203992 /* forest.mp3 in Resources */,
 				B75B33812D58D04A00CBBD18 /* meditation.mp3 in Resources */,
@@ -253,6 +260,7 @@
 				B7BAF4D62D4525A100203992 /* Theme.swift in Sources */,
 				B749F22A2CF78C98001595DE /* MyPage.swift in Sources */,
 				B749F2282CF7888F001595DE /* MoodPage.swift in Sources */,
+				B74045792D5DE862002C6C21 /* StatsManager.swift in Sources */,
 				B7BAF4D82D4525B800203992 /* ThemeManager.swift in Sources */,
 				B79076332D4E5AA0001CE70C /* HistoryPage.swift in Sources */,
 				B716FBF32D525455005F474F /* FocusView.swift in Sources */,
@@ -389,6 +397,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"FitDemo/Preview Content\"";
@@ -396,8 +405,10 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FitDemo/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = GoodMood;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
@@ -419,6 +430,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"FitDemo/Preview Content\"";
@@ -426,8 +438,10 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FitDemo/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = GoodMood;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.4;

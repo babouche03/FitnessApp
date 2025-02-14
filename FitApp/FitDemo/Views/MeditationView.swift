@@ -5,6 +5,9 @@ struct MeditationView: View {
     @State private var scale: CGFloat = 1.0
     @State private var opacity: Double = 0.3
     let themeManager: ThemeManager
+    @State private var meditationTime: Int = 0
+    @State private var timer: Timer?
+    @State private var showingCompletionAlert = false
     
     var body: some View {
         ZStack {
@@ -62,7 +65,7 @@ struct MeditationView: View {
                 
                 // 结束按钮
                 Button(action: {
-                    isPresented = false
+                    showingCompletionAlert = true
                 }) {
                     Text("结束")
                         .foregroundColor(.white)
@@ -70,10 +73,6 @@ struct MeditationView: View {
                         .background(
                             RoundedRectangle(cornerRadius: 22.5)
                                 .fill(Color.white.opacity(0.2))
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 22.5)
-                                        .stroke(Color.white.opacity(0.3), lineWidth: 1)
-                                )
                         )
                 }
                 .padding(.bottom, 50)
@@ -84,16 +83,43 @@ struct MeditationView: View {
                 SmallBubble()
             }
         }
+        .alert("冥想成果", isPresented: $showingCompletionAlert) {
+            Button("返回首页") {
+                let minutes = meditationTime / 60
+                if minutes >= 1 {
+                    StatsManager.shared.updateStats(meditationTime: minutes * 60)
+                }
+                timer?.invalidate()
+                isPresented = false
+            }
+        } message: {
+            Text("本次冥想时长: \(formatTime(meditationTime))")
+        }
         .onAppear {
             withAnimation {
                 scale = 1.5
                 opacity = 0.4
             }
             themeManager.playMeditationAudio()
+            startTimer()
         }
         .onDisappear {
             themeManager.playThemeAudio()
+            timer?.invalidate()
         }
+    }
+    
+    private func startTimer() {
+        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+            meditationTime += 1
+        }
+    }
+    
+    private func formatTime(_ seconds: Int) -> String {
+        let hours = seconds / 3600
+        let minutes = (seconds % 3600) / 60
+        let seconds = seconds % 60
+        return String(format: "%02d:%02d:%02d", hours, minutes, seconds)
     }
 }
 
