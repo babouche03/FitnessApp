@@ -69,7 +69,7 @@ struct RestView: View {
                 
                 // 中央倒计时组件
                 VStack(spacing: 25) {
-                    Text("Time for break")
+                    Text("Take a break")
                         .font(.system(size: 28, weight: .medium))
                         .foregroundColor(.white)
                     
@@ -100,7 +100,7 @@ struct RestView: View {
             .ignoresSafeArea()
         }
         .ignoresSafeArea()
-        .alert("休息成果", isPresented: $showingCompletionAlert) {
+        .alert("休息报告", isPresented: $showingCompletionAlert) {
             Button("返回首页") {
                 // 只有超过1分钟才记录
                 let minutes = actualRestTime / 60

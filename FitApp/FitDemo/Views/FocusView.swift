@@ -163,7 +163,10 @@ struct FocusView: View {
                 // 只有超过1分钟才记录，并按分钟取整
                 let minutes = focusTime / 60
                 if minutes >= 1 {
-                    StatsManager.shared.updateStats(focusTime: minutes * 60)
+                    StatsManager.shared.updateStats(
+                        focusTime: minutes * 60,
+                        drivingDistance: drivingDistance
+                    )
                 }
                 timer?.invalidate()
                 isPresented = false

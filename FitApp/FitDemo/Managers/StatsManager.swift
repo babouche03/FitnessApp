@@ -7,6 +7,7 @@ class StatsManager: ObservableObject {
         var focusTime: Int = 0      // 专注时间（秒）
         var restTime: Int = 0       // 休息时间（秒）
         var meditationTime: Int = 0 // 冥想时间（秒）
+        var drivingDistance: Double = 0.0 // 行驶里程（公里）
     }
     
     // 单例模式
@@ -34,13 +35,14 @@ class StatsManager: ObservableObject {
             DailyStats(
                 focusTime: result.focusTime + stats.focusTime,
                 restTime: result.restTime + stats.restTime,
-                meditationTime: result.meditationTime + stats.meditationTime
+                meditationTime: result.meditationTime + stats.meditationTime,
+                drivingDistance: result.drivingDistance + stats.drivingDistance
             )
         }
     }
     
     // 更新数据
-    func updateStats(focusTime: Int? = nil, restTime: Int? = nil, meditationTime: Int? = nil) {
+    func updateStats(focusTime: Int? = nil, restTime: Int? = nil, meditationTime: Int? = nil, drivingDistance: Double? = nil) {
         let today = Calendar.current.startOfDay(for: Date())
         var todayStats = dailyStats[today] ?? DailyStats()
         
@@ -53,6 +55,9 @@ class StatsManager: ObservableObject {
         }
         if let meditationTime = meditationTime, meditationTime >= 60 {
             todayStats.meditationTime += meditationTime
+        }
+        if let drivingDistance = drivingDistance {
+            todayStats.drivingDistance += drivingDistance
         }
         
         dailyStats[today] = todayStats

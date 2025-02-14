@@ -99,7 +99,7 @@ struct TabBarButton: View {
 struct HomePage: View {
     @State private var isViewingImage = false
     @State private var isShowingPopup = false
-    @State private var customMessage = UserDefaults.standard.string(forKey: "customMessage") ?? "Today is good day"
+    @State private var customMessage = UserDefaults.standard.string(forKey: "customMessage") ?? "今天是个好日子"
     @State private var isEditingMessage = false
     @State private var tempMessage = ""
     @State private var volume: Double = 0.5 // 音量控制状态
@@ -688,7 +688,7 @@ struct MeditationSettingModal: View {
             .padding(.horizontal)
             .padding(.top)
             
-            Text("请确认周边环境\n调整到您舒适的姿势")
+            Text("请选择一个安静的环境\n调整至舒适的姿势")
                 .foregroundColor(.white)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal)

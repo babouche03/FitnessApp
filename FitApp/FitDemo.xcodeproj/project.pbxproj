@@ -26,6 +26,12 @@
 		B78BC1E12D51161F00848016 /* RestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B78BC1E02D51161F00848016 /* RestView.swift */; };
 		B79076312D4E5A70001CE70C /* HistoryCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B79076302D4E5A70001CE70C /* HistoryCardView.swift */; };
 		B79076332D4E5AA0001CE70C /* HistoryPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B79076322D4E5AA0001CE70C /* HistoryPage.swift */; };
+		B7980E762D5F854100C3E193 /* summernight.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B7980E752D5F854000C3E193 /* summernight.mp3 */; };
+		B7980E7C2D5F894100C3E193 /* bonfire.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B7980E7B2D5F894100C3E193 /* bonfire.mp3 */; };
+		B7980E802D5F8E5700C3E193 /* restaurant.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = B7980E7F2D5F8E5700C3E193 /* restaurant.mp4 */; };
+		B7980E822D5F90E600C3E193 /* restaurant.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B7980E812D5F90E600C3E193 /* restaurant.mp3 */; };
+		B7980E842D5F91F200C3E193 /* autumn.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B7980E832D5F91F100C3E193 /* autumn.mp3 */; };
+		B7980E8E2D5F98AE00C3E193 /* highway.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B7980E8D2D5F98AE00C3E193 /* highway.mp3 */; };
 		B79C79A92D50C77E00962C19 /* bonfire.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = B79C79A82D50C77E00962C19 /* bonfire.mp4 */; };
 		B7B5D5AC2D47B6CD00511BC6 /* rain.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = B7B5D5AB2D47B6CD00511BC6 /* rain.mp4 */; };
 		B7B5D5AE2D47B6E600511BC6 /* rain.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B7B5D5AD2D47B6E600511BC6 /* rain.mp3 */; };
@@ -56,6 +62,12 @@
 		B78BC1E02D51161F00848016 /* RestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestView.swift; sourceTree = "<group>"; };
 		B79076302D4E5A70001CE70C /* HistoryCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryCardView.swift; sourceTree = "<group>"; };
 		B79076322D4E5AA0001CE70C /* HistoryPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryPage.swift; sourceTree = "<group>"; };
+		B7980E752D5F854000C3E193 /* summernight.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = summernight.mp3; sourceTree = "<group>"; };
+		B7980E7B2D5F894100C3E193 /* bonfire.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = bonfire.mp3; sourceTree = "<group>"; };
+		B7980E7F2D5F8E5700C3E193 /* restaurant.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = restaurant.mp4; sourceTree = "<group>"; };
+		B7980E812D5F90E600C3E193 /* restaurant.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = restaurant.mp3; sourceTree = "<group>"; };
+		B7980E832D5F91F100C3E193 /* autumn.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = autumn.mp3; sourceTree = "<group>"; };
+		B7980E8D2D5F98AE00C3E193 /* highway.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = highway.mp3; sourceTree = "<group>"; };
 		B79C79A82D50C77E00962C19 /* bonfire.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = bonfire.mp4; sourceTree = "<group>"; };
 		B7B5D5AB2D47B6CD00511BC6 /* rain.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = rain.mp4; sourceTree = "<group>"; };
 		B7B5D5AD2D47B6E600511BC6 /* rain.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = rain.mp3; sourceTree = "<group>"; };
@@ -122,6 +134,7 @@
 				B771381B2D550DAA00C0456F /* beach.mp4 */,
 				B79C79A82D50C77E00962C19 /* bonfire.mp4 */,
 				B7B5D5AB2D47B6CD00511BC6 /* rain.mp4 */,
+				B7980E7F2D5F8E5700C3E193 /* restaurant.mp4 */,
 			);
 			path = ThemeVideos;
 			sourceTree = "<group>";
@@ -169,6 +182,11 @@
 				B771381D2D550F8200C0456F /* beach.mp3 */,
 				B7B5D5AD2D47B6E600511BC6 /* rain.mp3 */,
 				B7BAF4DE2D45331A00203992 /* forest.mp3 */,
+				B7980E752D5F854000C3E193 /* summernight.mp3 */,
+				B7980E7B2D5F894100C3E193 /* bonfire.mp3 */,
+				B7980E812D5F90E600C3E193 /* restaurant.mp3 */,
+				B7980E832D5F91F100C3E193 /* autumn.mp3 */,
+				B7980E8D2D5F98AE00C3E193 /* highway.mp3 */,
 			);
 			path = ThemeAudios;
 			sourceTree = "<group>";
@@ -233,12 +251,18 @@
 			files = (
 				B70E94142CBD175F005135B9 /* Preview Assets.xcassets in Resources */,
 				B74A01DF2D58FE04008EEF02 /* hike.mp3 in Resources */,
+				B7980E842D5F91F200C3E193 /* autumn.mp3 in Resources */,
 				B79C79A92D50C77E00962C19 /* bonfire.mp4 in Resources */,
+				B7980E8E2D5F98AE00C3E193 /* highway.mp3 in Resources */,
 				B771381E2D550F8200C0456F /* beach.mp3 in Resources */,
 				B7B5D5AE2D47B6E600511BC6 /* rain.mp3 in Resources */,
+				B7980E7C2D5F894100C3E193 /* bonfire.mp3 in Resources */,
 				B7B5D5AC2D47B6CD00511BC6 /* rain.mp4 in Resources */,
 				B74873132D5E57AF006C98A8 /* Launch Screen.storyboard in Resources */,
 				B771381C2D550DAA00C0456F /* beach.mp4 in Resources */,
+				B7980E762D5F854100C3E193 /* summernight.mp3 in Resources */,
+				B7980E822D5F90E600C3E193 /* restaurant.mp3 in Resources */,
+				B7980E802D5F8E5700C3E193 /* restaurant.mp4 in Resources */,
 				B7BAF4DF2D45331A00203992 /* forest.mp3 in Resources */,
 				B75B33812D58D04A00CBBD18 /* meditation.mp3 in Resources */,
 				B70E94112CBD175F005135B9 /* Assets.xcassets in Resources */,

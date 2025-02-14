@@ -36,7 +36,7 @@ struct DiaryEditView: View {
                 VStack {
                     // 顶部日期时间显示
                     HStack {
-                        Text(currentDate.formatted(.dateTime.year().month().day().hour().minute()))
+                        Text(currentDate.formatted(.dateTime.locale(Locale(identifier: "zh_CN")).year().month().day().hour().minute()))
                             .font(.headline)
                         Spacer()
                         Text("心情指数: \(String(format: "%.1f", moodValue))")
@@ -84,14 +84,23 @@ struct DiaryEditView: View {
                     // 底部工具栏
                     HStack {
                         Button(action: { showImagePicker = true }) {
-                            Image(systemName: "photo")
-                                .font(.title2)
+                            HStack {
+                                Image(systemName: "photo.fill")
+                                    .font(.title2)
+                            }
+                            .foregroundColor(.white)
+                            .padding(.horizontal, 20)
+                            .padding(.vertical, 10)
+                            .background(
+                                RoundedRectangle(cornerRadius: 15)
+                                    .fill(Color.blue.opacity(0.7))
+                            )
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 15)
+                                    .stroke(Color.white.opacity(0.3), lineWidth: 1)
+                            )
                         }
-                        
-                        Button(action: { showVideoPicker = true }) {
-                            Image(systemName: "video")
-                                .font(.title2)
-                        }
+
                     }
                     .padding()
                 }

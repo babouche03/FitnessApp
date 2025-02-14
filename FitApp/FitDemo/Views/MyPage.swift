@@ -18,7 +18,7 @@ struct MyPage: View {
                     Text("\"数据只是路标，感受才是旅程\"")
                         .font(.title2)
                         .foregroundColor(.white)
-                        .padding(.bottom, 35)
+                        .padding(.bottom, 32)
                     // 今日数据卡片
                     DailyStatsCard(selectedDate: $selectedDate, showDatePicker: $showDatePicker)
                     
@@ -110,6 +110,7 @@ struct DailyStatsCard: View {
 // 累计数据卡片
 struct TotalStatsCard: View {
     @StateObject private var statsManager = StatsManager.shared
+    @State private var showDrivingDistance = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
@@ -120,12 +121,14 @@ struct TotalStatsCard: View {
             HStack(spacing: 15) {
                 let totalStats = statsManager.getTotalStats()
                 
-                StatItemHorizontal(
-                    title: "总专注",
-                    value: formatTime(totalStats.focusTime),
-                    icon: "timer",
-                    color: Color.green.opacity(0.4)
-                )
+                Button(action: { showDrivingDistance = true }) {
+                    StatItemHorizontal(
+                        title: "总专注",
+                        value: formatTime(totalStats.focusTime),
+                        icon: "timer",
+                        color: Color.green.opacity(0.4)
+                    )
+                }
                 
                 StatItemHorizontal(
                     title: "总休息",
@@ -145,6 +148,11 @@ struct TotalStatsCard: View {
         .padding()
         .background(.ultraThinMaterial)
         .cornerRadius(20)
+        .alert("专注之旅", isPresented: $showDrivingDistance) {
+            Button("确定", role: .cancel) { }
+        } message: {
+            Text("您已累计行驶 \(String(format: "%.2f", statsManager.getTotalStats().drivingDistance)) 公里")
+        }
     }
     
     private func formatTime(_ seconds: Int) -> String {
@@ -193,13 +201,37 @@ struct StatItemHorizontal: View {
 // 支持板块
 struct SupportSection: View {
     @State private var showAbout = false
+    @Environment(\.colorScheme) var colorScheme
+    @AppStorage("isDarkMode") private var isDarkMode = false
     
     var body: some View {
         VStack(spacing: 15) {
-            Text("支持")
-                .font(.headline)
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity, alignment: .leading)
+            // 标题栏：支持文字和主题切换按钮
+            HStack {
+                Text("支持")
+                    .font(.headline)
+                    .foregroundColor(.white)
+                
+                Spacer()
+                
+                // 主题切换按钮
+                Button(action: {
+                    isDarkMode.toggle()
+                    // 切换系统主题
+                    if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+                        windowScene.windows.forEach { window in
+                            window.overrideUserInterfaceStyle = isDarkMode ? .dark : .light
+                        }
+                    }
+                }) {
+                    Image(systemName: colorScheme == .dark ? "sun.max.fill" : "moon.fill")
+                        .font(.system(size: 14))
+                        .foregroundColor(.white)
+                        .padding(5)
+                        .background(Color.white.opacity(0.2))
+                        .clipShape(Circle())
+                }
+            }
             
             Button(action: {
                 sendEmail(to: "babouche0333@gmail.com")
@@ -255,13 +287,13 @@ struct AboutView: View {
                         .fontWeight(.bold)
                         .padding(.bottom, 10)
                     
-                    Text("这是我独立开发的第一款ios app。创作这款App的灵感是我步入大三后学业上的压力加上未来道路选择的迷茫常常使我陷入焦虑之中。在我陷入情绪低潮时,\"公园定律\"拯救了我。去到学校附近的公园待上一段时间极大程度上缓解了我生活中的不快。但由于不是每天都能抽出时间去公园，于是，我产生了在自己手机上创造一个\"公园\"的想法。")
+                    Text("    这是我独立开发的第一款ios app。创作这款App的灵感是:步入大三后,对未来道路的迷茫常常使我悲观焦虑。在我陷入情绪低潮时,\"公园定律\"拯救了我。去到学校附近的公园待上一段时间极大程度上缓解了我生活中的不快。但由于不是每天都能抽出时间去公园，于是，我产生了在自己手机上创造一个\"公园\"的想法。")
                     
-                    Text("其实在此之前,我了解过市面上已经有不少类似功能的产品。但大多功能较为繁杂,且费用对于我一大学生并不算友好。因此我还是坚决要打造一款最适合自己的app。我希望构建一个无联网,无广告，无内购的\"三无\"产品。用户无需担心数据隐私问题，所有数据都保存用户本地，一切数据信息只由用户掌管，与他人无关。")
+                    Text("    其实在此之前,我了解过市面上已经有不少类似功能的产品。但大多功能较为繁杂,且费用对于学生并不算友好。因此我还是坚决要打造一款最适合自己的app。我希望构建一个无联网,无广告，无内购的\"三无\"产品。用户无需担心数据隐私问题，所有数据都保存用户本地，一切数据信息只由用户掌管，与他人无关。")
                     
-                    Text("对我来说,这又是一个用爱发电的项目,苹果一年开发者账号的费用属实不便宜,因此大概率明年我不会继续续费(这不会影响已经安装的用户继续使用）。但在未来一年内,如果时间、精力允许,我也许会进行版本更新(计划推出用户自定义主题等功能)。")
+                    Text("    对我来说,这又是一个用爱发电的项目,苹果一年开发者账号的费用属实不便宜,因此大概率明年我不会继续续费(这不会影响已经安装的用户继续使用）。但在未来一年内,如果时间、精力允许,我也许会进行版本更新(计划推出用户自定义主题等功能)。")
                     
-                    Text("最后,真心希望这款app能够帮助到您,祝您生活愉快。")
+                    Text("    最后,真心希望这款app能够帮助到您,祝您生活愉快。")
                     
                     HStack {
                         Spacer()
@@ -281,7 +313,7 @@ struct AboutView: View {
                 }
             }
         }
-        .preferredColorScheme(.dark)  // 强制使用深色模式
+        // .preferredColorScheme(.dark)  // 强制使用深色模式
     }
 }
 
