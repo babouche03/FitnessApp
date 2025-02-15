@@ -12,6 +12,10 @@ struct RestView: View {
     @StateObject private var localThemeManager = ThemeManager()
     @State private var actualRestTime: Int = 0
     @State private var showingCompletionAlert = false
+    @State private var longPressTimer: Timer?
+    @State private var isLongPressing = false
+    @State private var longPressProgress: CGFloat = 0
+    @State private var isLongPressCompleted = false
     
     init(restTime: Int, isPresented: Binding<Bool>, parentThemeManager: ThemeManager) {
         self.initialRestTime = restTime
@@ -76,16 +80,51 @@ struct RestView: View {
                     TimerView(timeRemaining: timeRemaining)
                         .padding()
                     
-                    Button(action: {
-                        showingCompletionAlert = true  // 显示统计弹窗
-                        timer?.invalidate()  // 停止计时器
-                    }) {
-                        Text("结束休息")
-                            .foregroundColor(.white)
-                            .frame(width: 160, height: 45)
-                            .background(Color.black.opacity(0.3))
-                            .cornerRadius(22.5)
+                    Button(action: {}) {
+                        VStack(spacing: 8) {
+                            Text("结束休息")
+                                .foregroundColor(.white)
+                                .frame(width: 160, height: 45)
+                                .background(Color.black.opacity(0.3))
+                                .cornerRadius(22.5)
+                            
+                            // 长按时显示的进度条
+                            if isLongPressing {
+                                ZStack(alignment: .leading) {
+                                    Rectangle()
+                                        .fill(Color.white.opacity(0.3))
+                                        .frame(width: 160, height: 3)
+                                    
+                                    Rectangle()
+                                        .fill(Color.white)
+                                        .frame(width: 160 * longPressProgress, height: 3)
+                                }
+                                .frame(width: 160)
+                                .cornerRadius(1.5)
+                            }
+                        }
                     }
+                    .simultaneousGesture(
+                        DragGesture(minimumDistance: 0)
+                            .onChanged { _ in
+                                if longPressTimer == nil {
+                                    isLongPressing = true
+                                    withAnimation(.linear(duration: 2)) {
+                                        longPressProgress = 1
+                                    }
+                                    longPressTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { _ in
+                                        showingCompletionAlert = true
+                                        timer?.invalidate()
+                                    }
+                                }
+                            }
+                            .onEnded { _ in
+                                longPressTimer?.invalidate()
+                                longPressTimer = nil
+                                isLongPressing = false
+                                longPressProgress = 0
+                            }
+                    )
                 }
                 .offset(y: -30) // 微调整体位置，使视觉上更居中
                 
@@ -113,8 +152,8 @@ struct RestView: View {
             Text("本次休息时长: \(formatTime(actualRestTime))")
         }
         .onAppear {
-            // 设置默认主题（森林）
-            localThemeManager.switchTheme(to: 0)
+            // 设置默认主题（夏夜）
+            localThemeManager.switchTheme(to: 5)
             startTimer()
             requestNotificationPermission()
             // 暂停父级音频

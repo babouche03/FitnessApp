@@ -8,6 +8,10 @@ struct MeditationView: View {
     @State private var meditationTime: Int = 0
     @State private var timer: Timer?
     @State private var showingCompletionAlert = false
+    @State private var isLongPressing = false
+    @State private var longPressProgress: CGFloat = 0
+    @State private var isLongPressCompleted = false
+    @State private var longPressTimer: Timer?
     
     var body: some View {
         ZStack {
@@ -64,17 +68,52 @@ struct MeditationView: View {
                 Spacer()
                 
                 // 结束按钮
-                Button(action: {
-                    showingCompletionAlert = true
-                }) {
-                    Text("结束")
-                        .foregroundColor(.white)
-                        .frame(width: 120, height: 45)
-                        .background(
-                            RoundedRectangle(cornerRadius: 22.5)
-                                .fill(Color.white.opacity(0.2))
-                        )
+                Button(action: {}) {
+                    VStack(spacing: 8) {
+                        Text("结束")
+                            .foregroundColor(.white)
+                            .frame(width: 120, height: 45)
+                            .background(
+                                RoundedRectangle(cornerRadius: 22.5)
+                                    .fill(Color.white.opacity(0.2))
+                            )
+                        
+                        // 长按时显示的进度条
+                        if isLongPressing {
+                            ZStack(alignment: .leading) {
+                                Rectangle()
+                                    .fill(Color.white.opacity(0.3))
+                                    .frame(width: 120, height: 3)
+                                
+                                Rectangle()
+                                    .fill(Color.white)
+                                    .frame(width: 120 * longPressProgress, height: 3)
+                            }
+                            .frame(width: 120)
+                            .cornerRadius(1.5)
+                        }
+                    }
                 }
+                .simultaneousGesture(
+                    DragGesture(minimumDistance: 0)
+                        .onChanged { _ in
+                            if longPressTimer == nil {
+                                isLongPressing = true
+                                withAnimation(.linear(duration: 2)) {
+                                    longPressProgress = 1
+                                }
+                                longPressTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { _ in
+                                    showingCompletionAlert = true
+                                }
+                            }
+                        }
+                        .onEnded { _ in
+                            longPressTimer?.invalidate()
+                            longPressTimer = nil
+                            isLongPressing = false
+                            longPressProgress = 0
+                        }
+                )
                 .padding(.bottom, 50)
             }
             
