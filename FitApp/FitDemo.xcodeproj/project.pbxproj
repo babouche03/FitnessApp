@@ -20,6 +20,8 @@
 		B749F22A2CF78C98001595DE /* MyPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B749F2292CF78C98001595DE /* MyPage.swift */; };
 		B74A01DF2D58FE04008EEF02 /* hike.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B74A01DE2D58FE04008EEF02 /* hike.mp3 */; };
 		B75B33812D58D04A00CBBD18 /* meditation.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B75B33802D58D04A00CBBD18 /* meditation.mp3 */; };
+		B76A34642D61A6DF00327E25 /* aurora.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = B76A34632D61A6DF00327E25 /* aurora.mp4 */; };
+		B76A34662D61A86B00327E25 /* aurora.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B76A34652D61A86B00327E25 /* aurora.mp3 */; };
 		B771381C2D550DAA00C0456F /* beach.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = B771381B2D550DAA00C0456F /* beach.mp4 */; };
 		B771381E2D550F8200C0456F /* beach.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B771381D2D550F8200C0456F /* beach.mp3 */; };
 		B782B6E02D5655ED0026B324 /* MeditationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B782B6DF2D5655ED0026B324 /* MeditationView.swift */; };
@@ -45,8 +47,6 @@
 		B7C558962D607EC300F80901 /* temple.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B7C558952D607EC300F80901 /* temple.mp3 */; };
 		B7C5589A2D60824100F80901 /* dream.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = B7C558992D60824100F80901 /* dream.mp4 */; };
 		B7C5589C2D6083A200F80901 /* dream.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B7C5589B2D6083A200F80901 /* dream.mp3 */; };
-		B7C558A42D60902900F80901 /* desert.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = B7C558A32D60902900F80901 /* desert.mp4 */; };
-		B7C558A62D60910F00F80901 /* desert.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B7C558A52D60910F00F80901 /* desert.mp3 */; };
 		B7E8AEBD2D47B7C500B2086C /* VideoPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7E8AEBC2D47B7C500B2086C /* VideoPlayerView.swift */; };
 /* End PBXBuildFile section */
 
@@ -65,6 +65,8 @@
 		B749F2292CF78C98001595DE /* MyPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPage.swift; sourceTree = "<group>"; };
 		B74A01DE2D58FE04008EEF02 /* hike.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = hike.mp3; sourceTree = "<group>"; };
 		B75B33802D58D04A00CBBD18 /* meditation.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = meditation.mp3; sourceTree = "<group>"; };
+		B76A34632D61A6DF00327E25 /* aurora.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = aurora.mp4; sourceTree = "<group>"; };
+		B76A34652D61A86B00327E25 /* aurora.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = aurora.mp3; sourceTree = "<group>"; };
 		B771381B2D550DAA00C0456F /* beach.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = beach.mp4; sourceTree = "<group>"; };
 		B771381D2D550F8200C0456F /* beach.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = beach.mp3; sourceTree = "<group>"; };
 		B782B6DF2D5655ED0026B324 /* MeditationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeditationView.swift; sourceTree = "<group>"; };
@@ -90,8 +92,6 @@
 		B7C558952D607EC300F80901 /* temple.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = temple.mp3; sourceTree = "<group>"; };
 		B7C558992D60824100F80901 /* dream.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = dream.mp4; sourceTree = "<group>"; };
 		B7C5589B2D6083A200F80901 /* dream.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = dream.mp3; sourceTree = "<group>"; };
-		B7C558A32D60902900F80901 /* desert.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = desert.mp4; sourceTree = "<group>"; };
-		B7C558A52D60910F00F80901 /* desert.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = desert.mp3; sourceTree = "<group>"; };
 		B7E8AEBC2D47B7C500B2086C /* VideoPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayerView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -149,13 +149,13 @@
 		B7B5D5AA2D47B6B300511BC6 /* ThemeVideos */ = {
 			isa = PBXGroup;
 			children = (
+				B76A34632D61A6DF00327E25 /* aurora.mp4 */,
 				B771381B2D550DAA00C0456F /* beach.mp4 */,
 				B79C79A82D50C77E00962C19 /* bonfire.mp4 */,
 				B7B5D5AB2D47B6CD00511BC6 /* rain.mp4 */,
 				B7980E7F2D5F8E5700C3E193 /* restaurant.mp4 */,
 				B7C5588F2D60781F00F80901 /* spring.mp4 */,
 				B7C558992D60824100F80901 /* dream.mp4 */,
-				B7C558A32D60902900F80901 /* desert.mp4 */,
 			);
 			path = ThemeVideos;
 			sourceTree = "<group>";
@@ -213,7 +213,7 @@
 				B7C558912D6078F900F80901 /* spring.mp3 */,
 				B7C558952D607EC300F80901 /* temple.mp3 */,
 				B7C5589B2D6083A200F80901 /* dream.mp3 */,
-				B7C558A52D60910F00F80901 /* desert.mp3 */,
+				B76A34652D61A86B00327E25 /* aurora.mp3 */,
 			);
 			path = ThemeAudios;
 			sourceTree = "<group>";
@@ -289,14 +289,14 @@
 				B7B5D5AE2D47B6E600511BC6 /* rain.mp3 in Resources */,
 				B7C5589A2D60824100F80901 /* dream.mp4 in Resources */,
 				B7980E7C2D5F894100C3E193 /* bonfire.mp3 in Resources */,
-				B7C558A42D60902900F80901 /* desert.mp4 in Resources */,
+				B76A34662D61A86B00327E25 /* aurora.mp3 in Resources */,
 				B7B5D5AC2D47B6CD00511BC6 /* rain.mp4 in Resources */,
-				B7C558A62D60910F00F80901 /* desert.mp3 in Resources */,
 				B771381C2D550DAA00C0456F /* beach.mp4 in Resources */,
 				B7980E762D5F854100C3E193 /* summernight.mp3 in Resources */,
 				B7C5589C2D6083A200F80901 /* dream.mp3 in Resources */,
 				B7C558962D607EC300F80901 /* temple.mp3 in Resources */,
 				B7980E822D5F90E600C3E193 /* restaurant.mp3 in Resources */,
+				B76A34642D61A6DF00327E25 /* aurora.mp4 in Resources */,
 				B7980E802D5F8E5700C3E193 /* restaurant.mp4 in Resources */,
 				B7BAF4DF2D45331A00203992 /* forest.mp3 in Resources */,
 				B75B33812D58D04A00CBBD18 /* meditation.mp3 in Resources */,
@@ -458,10 +458,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"FitDemo/Preview Content\"";
-				DEVELOPMENT_TEAM = 8B7R34XCRD;
+				DEVELOPMENT_TEAM = WR5S5C9384;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FitDemo/Info.plist;
@@ -477,8 +478,9 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = babouche.FitDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.babouche.FitDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -491,10 +493,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"FitDemo/Preview Content\"";
-				DEVELOPMENT_TEAM = 8B7R34XCRD;
+				DEVELOPMENT_TEAM = WR5S5C9384;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FitDemo/Info.plist;
@@ -510,8 +513,9 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = babouche.FitDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.babouche.FitDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

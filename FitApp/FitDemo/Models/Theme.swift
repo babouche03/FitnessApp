@@ -15,7 +15,7 @@ extension Theme {
         Theme(id: 1, name: "雨点", icon: "💧", backgroundImage: "rain_bg", backgroundVideo: "rain", audioName: "rain"),
         Theme(id: 2, name: "海滩", icon: "🏖️", backgroundImage: "beach_bg", backgroundVideo: "beach", audioName: "beach"),
         Theme(id: 3, name: "徒步", icon: "⛰️", backgroundImage: "hike1", backgroundVideo: nil, audioName: "hike"),
-        Theme(id: 4, name: "沙漠", icon: "🐫", backgroundImage: "desert_bg", backgroundVideo: "desert", audioName: "desert"),
+        Theme(id: 4, name: "极光", icon: "✨", backgroundImage: "desert_bg", backgroundVideo: "aurora", audioName: "aurora"),
         Theme(id: 5, name: "夏夜", icon: "🌙", backgroundImage: "summernight", backgroundVideo: nil, audioName: "summernight"),
         
         // 扩展主题
