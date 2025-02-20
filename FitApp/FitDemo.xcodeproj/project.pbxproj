@@ -20,6 +20,7 @@
 		B749F22A2CF78C98001595DE /* MyPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B749F2292CF78C98001595DE /* MyPage.swift */; };
 		B74A01DF2D58FE04008EEF02 /* hike.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B74A01DE2D58FE04008EEF02 /* hike.mp3 */; };
 		B75B33812D58D04A00CBBD18 /* meditation.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B75B33802D58D04A00CBBD18 /* meditation.mp3 */; };
+		B75FD71D2D6745C200C8E445 /* BlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B75FD71C2D6745C200C8E445 /* BlurView.swift */; };
 		B76364712D657C3B0041E0F5 /* DiaryStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B76364702D657C3B0041E0F5 /* DiaryStorage.swift */; };
 		B76A34642D61A6DF00327E25 /* aurora.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = B76A34632D61A6DF00327E25 /* aurora.mp4 */; };
 		B76A34662D61A86B00327E25 /* aurora.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B76A34652D61A86B00327E25 /* aurora.mp3 */; };
@@ -34,7 +35,6 @@
 		B7980E802D5F8E5700C3E193 /* restaurant.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = B7980E7F2D5F8E5700C3E193 /* restaurant.mp4 */; };
 		B7980E822D5F90E600C3E193 /* restaurant.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B7980E812D5F90E600C3E193 /* restaurant.mp3 */; };
 		B7980E842D5F91F200C3E193 /* autumn.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B7980E832D5F91F100C3E193 /* autumn.mp3 */; };
-		B7980E8E2D5F98AE00C3E193 /* highway.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B7980E8D2D5F98AE00C3E193 /* highway.mp3 */; };
 		B79C79A92D50C77E00962C19 /* bonfire.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = B79C79A82D50C77E00962C19 /* bonfire.mp4 */; };
 		B7B5D5AC2D47B6CD00511BC6 /* rain.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = B7B5D5AB2D47B6CD00511BC6 /* rain.mp4 */; };
 		B7B5D5AE2D47B6E600511BC6 /* rain.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B7B5D5AD2D47B6E600511BC6 /* rain.mp3 */; };
@@ -49,6 +49,7 @@
 		B7C5589A2D60824100F80901 /* dream.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = B7C558992D60824100F80901 /* dream.mp4 */; };
 		B7C5589C2D6083A200F80901 /* dream.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B7C5589B2D6083A200F80901 /* dream.mp3 */; };
 		B7E8AEBD2D47B7C500B2086C /* VideoPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7E8AEBC2D47B7C500B2086C /* VideoPlayerView.swift */; };
+		B7EB5C732D671DED0044FF8C /* snowmountain.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B7EB5C722D671DED0044FF8C /* snowmountain.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -66,6 +67,7 @@
 		B749F2292CF78C98001595DE /* MyPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPage.swift; sourceTree = "<group>"; };
 		B74A01DE2D58FE04008EEF02 /* hike.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = hike.mp3; sourceTree = "<group>"; };
 		B75B33802D58D04A00CBBD18 /* meditation.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = meditation.mp3; sourceTree = "<group>"; };
+		B75FD71C2D6745C200C8E445 /* BlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurView.swift; sourceTree = "<group>"; };
 		B76364702D657C3B0041E0F5 /* DiaryStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiaryStorage.swift; sourceTree = "<group>"; };
 		B76A34632D61A6DF00327E25 /* aurora.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = aurora.mp4; sourceTree = "<group>"; };
 		B76A34652D61A86B00327E25 /* aurora.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = aurora.mp3; sourceTree = "<group>"; };
@@ -80,7 +82,6 @@
 		B7980E7F2D5F8E5700C3E193 /* restaurant.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = restaurant.mp4; sourceTree = "<group>"; };
 		B7980E812D5F90E600C3E193 /* restaurant.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = restaurant.mp3; sourceTree = "<group>"; };
 		B7980E832D5F91F100C3E193 /* autumn.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = autumn.mp3; sourceTree = "<group>"; };
-		B7980E8D2D5F98AE00C3E193 /* highway.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = highway.mp3; sourceTree = "<group>"; };
 		B79C79A82D50C77E00962C19 /* bonfire.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = bonfire.mp4; sourceTree = "<group>"; };
 		B7B5D5AB2D47B6CD00511BC6 /* rain.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = rain.mp4; sourceTree = "<group>"; };
 		B7B5D5AD2D47B6E600511BC6 /* rain.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = rain.mp3; sourceTree = "<group>"; };
@@ -95,6 +96,7 @@
 		B7C558992D60824100F80901 /* dream.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = dream.mp4; sourceTree = "<group>"; };
 		B7C5589B2D6083A200F80901 /* dream.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = dream.mp3; sourceTree = "<group>"; };
 		B7E8AEBC2D47B7C500B2086C /* VideoPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayerView.swift; sourceTree = "<group>"; };
+		B7EB5C722D671DED0044FF8C /* snowmountain.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = snowmountain.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -175,6 +177,7 @@
 				B78BC1E02D51161F00848016 /* RestView.swift */,
 				B716FBF22D525455005F474F /* FocusView.swift */,
 				B782B6DF2D5655ED0026B324 /* MeditationView.swift */,
+				B75FD71C2D6745C200C8E445 /* BlurView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -210,13 +213,13 @@
 				B7980E7B2D5F894100C3E193 /* bonfire.mp3 */,
 				B7980E812D5F90E600C3E193 /* restaurant.mp3 */,
 				B7980E832D5F91F100C3E193 /* autumn.mp3 */,
-				B7980E8D2D5F98AE00C3E193 /* highway.mp3 */,
 				B7C558832D605ECA00F80901 /* keyboard.mp3 */,
 				B7C5588D2D6074F500F80901 /* teahouse.mp3 */,
 				B7C558912D6078F900F80901 /* spring.mp3 */,
 				B7C558952D607EC300F80901 /* temple.mp3 */,
 				B7C5589B2D6083A200F80901 /* dream.mp3 */,
 				B76A34652D61A86B00327E25 /* aurora.mp3 */,
+				B7EB5C722D671DED0044FF8C /* snowmountain.mp3 */,
 			);
 			path = ThemeAudios;
 			sourceTree = "<group>";
@@ -284,9 +287,9 @@
 				B7980E842D5F91F200C3E193 /* autumn.mp3 in Resources */,
 				B7C558922D6078F900F80901 /* spring.mp3 in Resources */,
 				B706C4212D60BE24002684D4 /* Launch Screen.storyboard in Resources */,
+				B7EB5C732D671DED0044FF8C /* snowmountain.mp3 in Resources */,
 				B79C79A92D50C77E00962C19 /* bonfire.mp4 in Resources */,
 				B7C558902D60781F00F80901 /* spring.mp4 in Resources */,
-				B7980E8E2D5F98AE00C3E193 /* highway.mp3 in Resources */,
 				B7C5588E2D6074F500F80901 /* teahouse.mp3 in Resources */,
 				B771381E2D550F8200C0456F /* beach.mp3 in Resources */,
 				B7B5D5AE2D47B6E600511BC6 /* rain.mp3 in Resources */,
@@ -328,6 +331,7 @@
 				B79076332D4E5AA0001CE70C /* HistoryPage.swift in Sources */,
 				B76364712D657C3B0041E0F5 /* DiaryStorage.swift in Sources */,
 				B716FBF32D525455005F474F /* FocusView.swift in Sources */,
+				B75FD71D2D6745C200C8E445 /* BlurView.swift in Sources */,
 				B7E8AEBD2D47B7C500B2086C /* VideoPlayerView.swift in Sources */,
 				B78BC1E12D51161F00848016 /* RestView.swift in Sources */,
 				B79076312D4E5A70001CE70C /* HistoryCardView.swift in Sources */,
@@ -464,7 +468,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "\"FitDemo/Preview Content\"";
 				DEVELOPMENT_TEAM = WR5S5C9384;
 				ENABLE_PREVIEWS = YES;
@@ -499,7 +503,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "\"FitDemo/Preview Content\"";
 				DEVELOPMENT_TEAM = WR5S5C9384;
 				ENABLE_PREVIEWS = YES;

@@ -22,7 +22,7 @@ extension Theme {
         Theme(id: 6, name: "柴火", icon: "🔥", backgroundImage: "bonfire_bg", backgroundVideo: "bonfire", audioName: "bonfire"),
         Theme(id: 7, name: "餐厅", icon: "🍽", backgroundImage: "restaurant_bg", backgroundVideo: "restaurant", audioName: "restaurant"),
         Theme(id: 8, name: "秋日", icon: "🍁", backgroundImage: "autumn", backgroundVideo: nil, audioName: "autumn"),
-        Theme(id: 9, name: "公路", icon: "🚦", backgroundImage: "highway", backgroundVideo: nil, audioName: "highway"),
+        Theme(id: 9, name: "雪山", icon: "❄️", backgroundImage: "snowmountain", backgroundVideo: nil, audioName: "snowmountain"),
         Theme(id: 10, name: "键盘", icon: "⌨", backgroundImage: "keyboard", backgroundVideo: nil, audioName: "keyboard"),
         Theme(id: 11, name: "茶馆", icon: "🍵", backgroundImage: "teahouse", backgroundVideo: nil, audioName: "teahouse"),
         Theme(id: 12, name: "泉水", icon: "⛲️", backgroundImage: "spring_bg", backgroundVideo: "spring", audioName: "spring"),

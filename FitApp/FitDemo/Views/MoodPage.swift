@@ -8,14 +8,25 @@ struct MoodPage: View {
     @State private var showDiaryOptions = false
     @State private var showDiaryEdit = false
     @State private var typingTimer: Timer?
+    @ObservedObject var themeManager: ThemeManager  //themeManager
 
     var body: some View {
         ZStack {
-            // 背景渐变保持不变
-            LinearGradient(gradient: Gradient(colors: [Color.black, Color.blue]), 
-                         startPoint: .top, 
-                         endPoint: .bottom)
-                .edgesIgnoringSafeArea(.all)
+            // 背景层
+            Group {
+                if let videoName = themeManager.currentTheme.backgroundVideo {
+                    VideoPlayerView(videoName: videoName)
+                        .overlay(BlurView(style: .dark))  // 使用 BlurView
+                } else {
+                    Image(themeManager.currentTheme.backgroundImage)
+                        .resizable()
+                        .scaledToFill()
+                        .overlay(BlurView(style: .dark))  // 使用 BlurView
+                }
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .edgesIgnoringSafeArea(.all)
+            .allowsHitTesting(false)
             
             // 主要内容使用翻页效果
             ZStack {
@@ -30,7 +41,7 @@ struct MoodPage: View {
                                 }
                             }) {
                                 Circle()
-                                    .fill(.ultraThinMaterial)
+                                    .fill(.regularMaterial)
                                     .frame(width: 40, height: 40)
                                     .overlay(
                                         Image(systemName: "arrow.right")
@@ -64,7 +75,7 @@ struct MoodPage: View {
                                 }
                             }) {
                                 Circle()
-                                    .fill(.ultraThinMaterial)
+                                    .fill(.regularMaterial)
                                     .frame(width: 40, height: 40)
                                     .overlay(
                                         Image(systemName: "arrow.left")
@@ -79,7 +90,7 @@ struct MoodPage: View {
                         .zIndex(1)  // 确保按钮在最上层
                         .ignoresSafeArea(.all, edges: .top)  // 忽略顶部安全区域
                         
-                        HistoryPage()
+                        HistoryPage(themeManager: themeManager)
                     }
                     .rotation3DEffect(
                         .degrees(isFlipped ? 0 : -180),
@@ -264,6 +275,7 @@ struct MoodSlider: View {
 // 自定义表情面部
 struct MoodFace: View {
     let value: Double
+    var lineWidth: CGFloat = 5  // 添加默认值为4的线宽参数
     
     private var faceColor: Color {
         if value < 5 {
@@ -295,13 +307,13 @@ struct MoodFace: View {
                     let endPoint = CGPoint(x: width * 0.8, y: height * 0.65)
                     let controlPoint = CGPoint(
                         x: width * 0.5,
-                        y: height * (0.65 + (value - 5) * 0.04) // 基准点
+                        y: height * (0.65 + (value - 5) * 0.04)
                     )
                     
                     path.move(to: startPoint)
                     path.addQuadCurve(to: endPoint, control: controlPoint)
                 }
-                .stroke(.black, lineWidth: 3)
+                .stroke(.black, lineWidth: lineWidth)  // 使用传入的线宽参数
             }
         }
     }
@@ -359,6 +371,6 @@ struct BottomBarButton: View {
 
 struct MoodPage_Previews: PreviewProvider {
     static var previews: some View {
-        MoodPage()
+        MoodPage(themeManager: ThemeManager())
     }
 }

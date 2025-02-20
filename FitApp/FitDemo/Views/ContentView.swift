@@ -18,7 +18,7 @@ struct ContentView: View {
                 
                 // 环境
                 NavigationView {
-                    MoodPage()
+                    MoodPage(themeManager: themeManager)
                 }
                 .tabItem {
                     EmptyView()
@@ -27,7 +27,7 @@ struct ContentView: View {
                 
                 // 我的
                 NavigationView {
-                    MyPage()
+                    MyPage(themeManager: themeManager)
                 }
                 .tabItem {
                     EmptyView()

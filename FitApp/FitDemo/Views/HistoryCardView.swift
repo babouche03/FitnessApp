@@ -25,7 +25,7 @@ struct HistoryCardView: View {
             
             HStack {
                 Spacer()
-                MoodFace(value: diary.mood)
+                MoodFace(value: diary.mood, lineWidth: 3)
                     .frame(width: 60, height: 60)
             }
         }

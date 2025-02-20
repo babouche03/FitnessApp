@@ -4,35 +4,54 @@ struct MyPage: View {
     @State private var selectedDate = Date()
     @State private var showDatePicker = false
     @State private var showClearDataAlert = false
+    @ObservedObject var themeManager: ThemeManager
     
     var body: some View {
         ZStack {
-            // 背景渐变
-            LinearGradient(gradient: Gradient(colors: [Color.black, Color.blue]), 
-                         startPoint: .top, 
-                         endPoint: .bottom)
-                .edgesIgnoringSafeArea(.all)
+            // 背景层
+            Group {
+                if let videoName = themeManager.currentTheme.backgroundVideo {
+                    VideoPlayerView(videoName: videoName)
+                        .overlay(BlurView(style: .dark))  // 使用 BlurView
+                } else {
+                    Image(themeManager.currentTheme.backgroundImage)
+                        .resizable()
+                        .scaledToFill()
+                        .overlay(BlurView(style: .dark))  // 使用 BlurView
+                }
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .edgesIgnoringSafeArea(.all)
+            .allowsHitTesting(false)
             
+            // 内容层
             ScrollView {
                 VStack(spacing: 25) {
                     Text("\"数据只是路标，感受才是旅程\"")
                         .font(.title2)
                         .foregroundColor(.white)
                         .padding(.bottom, 32)
+                        
+                    
                     // 今日数据卡片
                     DailyStatsCard(selectedDate: $selectedDate, showDatePicker: $showDatePicker)
+                        .padding(.horizontal, 22)  // 调整卡片两侧边距
                     
                     // 累计数据卡片
                     TotalStatsCard()
+                        .padding(.horizontal, 22)  // 调整卡片两侧边距
                     
                     // 支持板块
                     SupportSection()
+                        .padding(.horizontal, 22)  // 调整支持板块两侧边距
                     
                     // 数据管理
                     DataManagementSection(showAlert: $showClearDataAlert)
+                        .padding(.horizontal, 22)  // 调整数据管理板块两侧边距
                 }
-                .padding()
+                .padding(.vertical)  // 保持垂直方向的内边距
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .alert("确认清除数据", isPresented: $showClearDataAlert) {
             Button("取消", role: .cancel) { }
@@ -372,5 +391,5 @@ struct StatItem: View {
 }
 
 #Preview {
-    MyPage()
+    MyPage(themeManager: ThemeManager())
 }

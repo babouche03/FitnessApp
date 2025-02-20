@@ -35,6 +35,7 @@ struct HistoryPage: View {
     @State private var diaryToDelete: DiaryEntry?
     @State private var isDeleting = false
     @State private var lastActiveIndex: Int = 0
+    @ObservedObject var themeManager: ThemeManager
     
     var body: some View {
         GeometryReader { geometry in
@@ -42,6 +43,22 @@ struct HistoryPage: View {
             let horizontalPadding: CGFloat = 40
             
             ZStack {
+                // 背景层
+                Group {
+                    if let videoName = themeManager.currentTheme.backgroundVideo {
+                        VideoPlayerView(videoName: videoName)
+                            .overlay(BlurView(style: .dark))  // 使用 BlurView
+                    } else {
+                        Image(themeManager.currentTheme.backgroundImage)
+                            .resizable()
+                            .scaledToFill()
+                            .overlay(BlurView(style: .dark))  // 使用 BlurView
+                    }
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .edgesIgnoringSafeArea(.all)
+                .allowsHitTesting(false)
+                
                 VStack(spacing: 0) {
                     Spacer()
                         .frame(height: 120)
