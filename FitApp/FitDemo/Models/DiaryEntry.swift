@@ -42,24 +42,17 @@ class DiaryManager {
     private var diaries: [DiaryEntry] = []
     private var currentDraft: DiaryEntry?
     
-    private let userDefaults = UserDefaults.standard
-    private let diariesKey = "savedDiaries"
-    private let currentDraftKey = "currentDraft"
-    
-    init() {
+    private init() {
         loadDiaries()
     }
     
     func saveDiary(_ diary: DiaryEntry) {
-        if let index = diaries.firstIndex(where: { $0.id == diary.id }) {
-            // 更新现有日记
-            diaries[index] = diary
-        } else {
-            // 添加新日记
-            diaries.append(diary)
+        do {
+            try DiaryStorage.shared.saveDiary(diary)
+            loadDiaries()
+        } catch {
+            print("保存日记失败: \(error)")
         }
-        currentDraft = nil
-        saveToDisk()
     }
     
     func getCurrentDraft() -> DiaryEntry? {
@@ -68,45 +61,32 @@ class DiaryManager {
     
     func setCurrentDraft(_ diary: DiaryEntry?) {
         currentDraft = diary
-        // 保存草稿到磁盘
-        if let draft = diary {
-            if let encoded = try? JSONEncoder().encode(draft) {
-                userDefaults.set(encoded, forKey: currentDraftKey)
-            }
-        } else {
-            userDefaults.removeObject(forKey: currentDraftKey)
+        do {
+            try DiaryStorage.shared.saveDraft(diary)
+        } catch {
+            print("保存草稿失败: \(error)")
         }
     }
     
     func getAllDiaries() -> [DiaryEntry] {
-        return diaries.sorted { $0.date > $1.date }
+        return diaries
     }
     
     func deleteDiary(withId id: UUID) {
-        if let index = diaries.firstIndex(where: { $0.id == id }) {
-            diaries.remove(at: index)
-            saveToDisk()
+        do {
+            try DiaryStorage.shared.deleteDiary(withId: id)
+            loadDiaries()
+        } catch {
+            print("删除日记失败: \(error)")
         }
-    }
-    
-    private func saveToDisk() {
-        if let encoded = try? JSONEncoder().encode(diaries) {
-            userDefaults.set(encoded, forKey: diariesKey)
-        }
-        // 当保存日记时，清除当前草稿
-        userDefaults.removeObject(forKey: currentDraftKey)
     }
     
     private func loadDiaries() {
-        if let savedData = userDefaults.data(forKey: diariesKey),
-           let decoded = try? JSONDecoder().decode([DiaryEntry].self, from: savedData) {
-            diaries = decoded
-        }
-        
-        // 加载草稿
-        if let draftData = userDefaults.data(forKey: currentDraftKey),
-           let decoded = try? JSONDecoder().decode(DiaryEntry.self, from: draftData) {
-            currentDraft = decoded
+        do {
+            diaries = try DiaryStorage.shared.getAllDiaries().sorted { $0.date > $1.date }
+        } catch {
+            print("加载日记失败: \(error)")
+            diaries = []
         }
     }
 }

@@ -158,8 +158,7 @@ struct DiaryEditView: View {
             Button("取消", role: .cancel) { }
             Button("删除", role: .destructive) {
                 if let index = imageIndexToDelete {
-                    selectedImages.remove(at: index)
-                    hasEdited = true
+                    deleteImage(at: index)
                 }
             }
         } message: {
@@ -188,6 +187,14 @@ struct DiaryEditView: View {
             )
             DiaryManager.shared.saveDiary(diary)
         }
+    }
+    
+    // 添加图片删除方法
+    private func deleteImage(at index: Int) {
+        selectedImages.remove(at: index)
+        hasEdited = true
+        // 立即保存更改
+        saveDiary()
     }
 }
 

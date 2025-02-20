@@ -105,7 +105,7 @@ struct DailyStatsCard: View {
         let hours = seconds / 3600
         let minutes = (seconds % 3600) / 60
         if hours > 0 {
-            return "\(hours)小时"
+            return "\(hours)时\(minutes)分"
         } else {
             return "\(minutes)分钟"
         }
@@ -162,10 +162,10 @@ struct TotalStatsCard: View {
     
     private func formatTime(_ seconds: Int) -> String {
         let hours = seconds / 3600
+        let minutes = (seconds % 3600) / 60
         if hours > 0 {
-            return "\(hours)小时"
+            return "\(hours)时\(minutes)分"
         } else {
-            let minutes = seconds / 60
             return "\(minutes)分钟"
         }
     }
@@ -195,6 +195,8 @@ struct StatItemHorizontal: View {
                 .font(.title3)
                 .fontWeight(.bold)
                 .foregroundColor(.white)
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
         }
         .padding()
         .frame(maxWidth: .infinity)
@@ -360,6 +362,8 @@ struct StatItem: View {
             Text(value)
                 .font(.headline)
                 .foregroundColor(.white)
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
             Text(title)
                 .font(.caption)
                 .foregroundColor(.white.opacity(0.8))

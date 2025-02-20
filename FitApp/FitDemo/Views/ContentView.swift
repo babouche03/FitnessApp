@@ -388,7 +388,7 @@ struct CircularButton: View {
     @State private var showingFocusModal = false
     @State private var showingMeditationModal = false  // 添加冥想模态框状态
     @State private var selectedRestTime: Double = 10
-    @State private var selectedRestInterval: Double = 1
+    @State private var selectedRestInterval: Double = 30
     @State private var showRestView = false
     @State private var showFocusView = false
     @State private var showMeditationView = false  // 添加冥想视图状态

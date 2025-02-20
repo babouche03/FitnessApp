@@ -20,6 +20,7 @@
 		B749F22A2CF78C98001595DE /* MyPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B749F2292CF78C98001595DE /* MyPage.swift */; };
 		B74A01DF2D58FE04008EEF02 /* hike.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B74A01DE2D58FE04008EEF02 /* hike.mp3 */; };
 		B75B33812D58D04A00CBBD18 /* meditation.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B75B33802D58D04A00CBBD18 /* meditation.mp3 */; };
+		B76364712D657C3B0041E0F5 /* DiaryStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B76364702D657C3B0041E0F5 /* DiaryStorage.swift */; };
 		B76A34642D61A6DF00327E25 /* aurora.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = B76A34632D61A6DF00327E25 /* aurora.mp4 */; };
 		B76A34662D61A86B00327E25 /* aurora.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B76A34652D61A86B00327E25 /* aurora.mp3 */; };
 		B771381C2D550DAA00C0456F /* beach.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = B771381B2D550DAA00C0456F /* beach.mp4 */; };
@@ -65,6 +66,7 @@
 		B749F2292CF78C98001595DE /* MyPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPage.swift; sourceTree = "<group>"; };
 		B74A01DE2D58FE04008EEF02 /* hike.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = hike.mp3; sourceTree = "<group>"; };
 		B75B33802D58D04A00CBBD18 /* meditation.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = meditation.mp3; sourceTree = "<group>"; };
+		B76364702D657C3B0041E0F5 /* DiaryStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiaryStorage.swift; sourceTree = "<group>"; };
 		B76A34632D61A6DF00327E25 /* aurora.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = aurora.mp4; sourceTree = "<group>"; };
 		B76A34652D61A86B00327E25 /* aurora.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = aurora.mp3; sourceTree = "<group>"; };
 		B771381B2D550DAA00C0456F /* beach.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = beach.mp4; sourceTree = "<group>"; };
@@ -191,6 +193,7 @@
 			children = (
 				B7BAF4D72D4525B800203992 /* ThemeManager.swift */,
 				B74045782D5DE862002C6C21 /* StatsManager.swift */,
+				B76364702D657C3B0041E0F5 /* DiaryStorage.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -323,6 +326,7 @@
 				B74045792D5DE862002C6C21 /* StatsManager.swift in Sources */,
 				B7BAF4D82D4525B800203992 /* ThemeManager.swift in Sources */,
 				B79076332D4E5AA0001CE70C /* HistoryPage.swift in Sources */,
+				B76364712D657C3B0041E0F5 /* DiaryStorage.swift in Sources */,
 				B716FBF32D525455005F474F /* FocusView.swift in Sources */,
 				B7E8AEBD2D47B7C500B2086C /* VideoPlayerView.swift in Sources */,
 				B78BC1E12D51161F00848016 /* RestView.swift in Sources */,
@@ -460,7 +464,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"FitDemo/Preview Content\"";
 				DEVELOPMENT_TEAM = WR5S5C9384;
 				ENABLE_PREVIEWS = YES;
@@ -495,7 +499,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"FitDemo/Preview Content\"";
 				DEVELOPMENT_TEAM = WR5S5C9384;
 				ENABLE_PREVIEWS = YES;
